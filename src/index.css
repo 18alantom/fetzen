@@ -1,0 +1,6 @@
+#root {
+  width: 100%;
+  height: 100vh;
+  background-image: url("./login/assets/bg_image_half_res.jpg");
+  background-size: cover;
+}
