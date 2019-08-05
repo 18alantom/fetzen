@@ -7,16 +7,16 @@ import { Collapse, Link, Paper, Typography, TextField, Button } from "@material-
 const CustomTextField = withStyles(theme => ({
   root: {
     "& label": {
-      color: theme.palette.primary[800]
+      color: theme.palette.primary.main
     },
     "& .MuiInput-underline:before": {
-      borderBottom: `solid 1px ${theme.palette.primary[900]}`
+      borderBottom: `solid 1px ${fade(theme.palette.primary.main, 0.5)}`
     },
     "& .MuiInput-underline:after": {
-      borderBottom: `solid 2px ${theme.palette.primary[700]}`
+      borderBottom: `solid 2px ${theme.palette.primary.main}`
     },
     "& .MuiInputBase-input": {
-      color: theme.palette.primary[400]
+      color: theme.palette.primary.light
     }
   }
 }))(TextField);
@@ -33,35 +33,44 @@ const styles = theme => {
       padding: "16px",
       width: "288px",
       marginBottom: 8,
-      background: fade(darken(theme.palette.secondary[900], 0.9), 0.6),
+      background: fade(darken(theme.palette.secondary.dark, 0.8), 0.6),
       borderRadius: "0px",
       backdropFilter: "blur(4px)" // Only from chrome 76
     },
     loginTitle: {
-      color: theme.palette.primary[700],
+      color: theme.palette.primary.light,
+      fontWeight: "bold",
       textTransform: "uppercase",
-      letterSpacing: "2px"
+      letterSpacing: "5px"
     },
     textField: {
       marginBottom: "16px",
-      color: theme.palette.primary[500]
     },
     button: {
+      marginTop: "8px",
       borderRadius: 0,
-      color: theme.palette.primary[700]
+      background: fade(theme.palette.primary.main, 0.7),
+      "&:hover": {
+        background: fade(theme.palette.primary.main, 1)
+      }
     },
     link: {
       textShadow: "0px 1px 2px black",
       textTransform: "uppercase",
       cursor: "pointer",
-      color: theme.palette.primary[700],
+      color: theme.palette.primary.main,
       textAlign: "center"
     },
-    error: {
+    message: {
       textAlign: "center",
       textTransform: "uppercase",
-      fontSize: "0.8em",
-      color: theme.palette.primary[300]
+      fontSize: "0.8em"
+    },
+    error: {
+      color: theme.palette.error[400]
+    },
+    info: {
+      color: theme.palette.success[400]
     }
   };
 };
@@ -86,7 +95,8 @@ class LoginForm extends React.Component {
         "last name": ""
       },
       isRegister: false,
-      error: ""
+      error: "",
+      info: ""
     };
     this.linkClickHandler = this.linkClickHandler.bind(this);
     this.submitClickHandler = this.submitClickHandler.bind(this);
@@ -139,12 +149,12 @@ class LoginForm extends React.Component {
     });
   }
   linkClickHandler() {
-    this.setState(({ isRegister }) => ({ isRegister: !isRegister, error: "" }));
+    this.setState(({ isRegister }) => ({ isRegister: !isRegister, error: "", info: "" }));
   }
   postRegisterHandler() {
     this.setState(({ values, isRegister }) => {
       Object.keys(values).forEach(k => (values[k] = ""));
-      return { values, isRegister: !isRegister, error: "registered" };
+      return { values, isRegister: !isRegister, info: "registered", error: "" };
     });
   }
   submitClickHandler(e) {
@@ -164,17 +174,21 @@ class LoginForm extends React.Component {
     } else if (valid) {
       if (!this.props.loginHandler(this.state.values)) {
         this.setState({ error: "login failed" });
+      } else {
+        this.setState({ error: "", info: "logging in" });
       }
     }
   }
   render() {
     const { classes } = this.props;
-    const { error, isRegister, inputNames, values } = this.state;
+    const { info, error, isRegister, inputNames, values } = this.state;
     return (
       <div style={{ marginTop: 48 }}>
         <Collapse in={error !== ""}>
-          {/* <Collapse in={true}> */}
-          <Typography className={classes.error}>{error}</Typography>
+          <Typography className={`${classes.message} ${classes.error}`}>{error}</Typography>
+        </Collapse>
+        <Collapse in={info !== ""}>
+          <Typography className={`${classes.message} ${classes.info}`}>{info}</Typography>
         </Collapse>
         <Paper component="form" elevation={10} className={classes.form} id="login-form">
           <Typography component="h3" className={classes.loginTitle}>
@@ -229,7 +243,7 @@ class LoginForm extends React.Component {
               onChange={this.inputChangeHandler}
             />
           </Collapse>
-          <Button type="submit" size="large" className={classes.button} onClick={this.submitClickHandler}>
+          <Button fullWidth variant="contained" type="submit" size="medium" className={classes.button} onClick={this.submitClickHandler}>
             submit
           </Button>
         </Paper>

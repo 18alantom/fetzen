@@ -1,10 +1,10 @@
 import React from "react";
 import LoginForm from "./LoginForm";
+import Image from "./assets/bg_image_half_res.jpg";
 import { Typography } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 
 const styles = theme => {
-  console.log(theme);
   return {
     titleBox: {
       textAlign: "center",
@@ -14,17 +14,18 @@ const styles = theme => {
       alignItems: "center"
     },
     title: {
-      color: theme.palette.primary[600],
-      fontFamily: ["Righteous", "sans-serif"],
+      // color: theme.palette.primary[600],
+      color: theme.palette.primary.main,
+      fontFamily: theme.typography.titleFontFamily,
       letterSpacing: "10px",
       fontSize: "6rem",
       textShadow: "0px 1px 4px rgba(0,0,0,0.7)"
     },
     subtitle: {
-      color: theme.palette.primary[400],
-      fontFamily: ["Roboto", "sans-serif"],
+      color: theme.palette.primary.main,
+      fontFamily: theme.typography.titleFontFamily,
       fontWeight: 400,
-      letterSpacing: "5px",
+      letterSpacing: "8px",
       fontSize: "1.4rem",
       textShadow: "0px 1px 4px rgba(0,0,0,0.7)"
     },
@@ -32,7 +33,9 @@ const styles = theme => {
       height: "100%",
       display: "flex",
       justifyContent: "space-around",
-      alignItems: "center"
+      alignItems: "center",
+      background: `url(${Image})`,
+      backgroundSize: "cover"
     }
   };
 };
@@ -45,12 +48,12 @@ class LoginPage extends React.Component {
   loginHandler(values) {
     // Add code to post login details.
     console.log("logging in", values);
-    return false
+    return true;
   }
   registerHandler(values) {
     // Add code to register user.
     console.log("registering", values);
-    return false;
+    return true;
   }
   render() {
     const { classes } = this.props;
