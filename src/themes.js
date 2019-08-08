@@ -1,7 +1,7 @@
 import { createMuiTheme } from "@material-ui/core/styles";
 import { deepOrange, grey, green, red } from "@material-ui/core/colors";
 
-export default createMuiTheme({
+const theme = createMuiTheme({
   palette: {
     primary: {
       main: deepOrange[500]
@@ -17,3 +17,8 @@ export default createMuiTheme({
     titleFontFamily: "'Righteous', 'sans-serif'"
   }
 });
+
+document.getElementsByTagName('html')[0].style.backgroundColor = theme.palette.secondary.light;
+document.getElementsByTagName('body')[0].style.backgroundColor = theme.palette.secondary.light;
+document.getElementById('root').style.backgroundColor = theme.palette.secondary.light;
+export default theme;

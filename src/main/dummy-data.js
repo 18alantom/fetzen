@@ -24,18 +24,20 @@ class Workout {
   }
 }
 
+// units can be kg, lbs, knph, mph.
 class Exercise {
-  constructor(name, sets, note = "") {
+  constructor(name, sets, units = "kg", note = "") {
     this.name = name;
     this.sets = sets;
+    this.units = units;
     this.note = note;
   }
 }
 
 // Sets is an exisiting class name
 class Cycle {
-  constructor(weight, reps, rest) {
-    this.weight = weight;
+  constructor(intensity, reps, rest) {
+    this.intensity = intensity;
     this.reps = reps;
     this.rest = rest;
   }
@@ -51,7 +53,7 @@ const pushExercises = [
   new Exercise("Tricep Pushdown", [new Cycle(30, 15, 60), new Cycle(35, 12, 90), new Cycle(35, 12, 90)]),
   new Exercise("Lateral Raises", [new Cycle(10, 12, 60), new Cycle(12.5, 12, 90), new Cycle(10, 12, 90)]),
   new Exercise("Chest Fly Machine", [new Cycle(60, 15, 60), new Cycle(70, 12, 90), new Cycle(70, 12, 90)]),
-  new Exercise("Cable Tricp Extention", [new Cycle(30, 15, 60), new Cycle(35, 12, 90), new Cycle(35, 12, 90)]),
+  new Exercise("Cable Tricep Extention", [new Cycle(30, 15, 60), new Cycle(35, 12, 90), new Cycle(35, 12, 90)]),
   new Exercise("Shoulder Press Machine", [new Cycle(30, 15, 60), new Cycle(40, 12, 90), new Cycle(40, 12, 90)]),
   new Exercise("Chest Press Machine", [new Cycle(30, 15, 60), new Cycle(40, 12, 90), new Cycle(40, 12, 90)])
 ];
@@ -76,11 +78,11 @@ const legSqExercises = [
   new Exercise("Leg Curls", [new Cycle(50, 12, 90), new Cycle(50, 12, 90), new Cycle(50, 12, 90)])
 ];
 
-// Workouts
-const pushWorkout = new Workout("Push", ["Monday", "Thursday"], pushExercises);
-const pullWorkout = new Workout("Pull", ["Tuesday", "Friday"], pullExercises);
-const legDlWorkout = new Workout("Legs (Dl)", ["Wednesday"], legDlExercises);
-const legSqWorkout = new Workout("Legs (Sq)", ["Saturday"], legSqExercises);
+// Workouts week starts on 0 = sunday
+const pushWorkout = new Workout("Push", [1, 4], pushExercises);
+const pullWorkout = new Workout("Pull", [2, 5], pullExercises);
+const legDlWorkout = new Workout("Legs (Dl)", [3], legDlExercises);
+const legSqWorkout = new Workout("Legs (Sq)", [6], legSqExercises);
 
 // Goals
 const benchGoal = new Goal("Dumbell Bench 40kg", "Reach a dumbell bench of 40kg for atleast 5 reps with good form.", "21/01/20");

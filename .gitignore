@@ -8,6 +8,9 @@ yarn-error.log*
 # Stuff
 stuff/
 
+# Todo
+todo.txt
+
 # Runtime data
 pids
 *.pid
