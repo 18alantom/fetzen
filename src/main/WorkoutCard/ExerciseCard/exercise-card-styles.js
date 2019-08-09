@@ -1,7 +1,9 @@
 import { fade } from "@material-ui/core/styles/colorManipulator";
 const styles = theme => {
   return {
-    container: {},
+    container: {
+      cursor: "pointer"
+    },
     name: {
       maxWidth: "170px",
       whiteSpace: "nowrap",

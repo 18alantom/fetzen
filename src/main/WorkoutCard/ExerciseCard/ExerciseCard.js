@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Collapse } from "@material-ui/core";
+import { Typography, Collapse, Dialog } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 import { getAvg, getMax } from "../../../helpers/helpers";
 import { intensityUnits, setKeys } from "../../../helpers/constants";
@@ -13,11 +13,11 @@ class ExerciseCard extends React.Component {
     };
   }
   render() {
-    const { classes, exercise, collapsed } = this.props;
+    const { classes, exercise, collapsed, handleExerciseClick } = this.props;
     const { avgAccuracy } = this.state;
     const { name, sets, units } = exercise;
     return (
-      <div className={classes.container}>
+      <div className={classes.container} onClick={handleExerciseClick}>
         <div className={classes.titleBar}>
           <Typography className={classes.name}>{name}</Typography>
           <Typography>{`Max ${getMax(exercise, setKeys.intensity)} ${intensityUnits[units]}`}</Typography>

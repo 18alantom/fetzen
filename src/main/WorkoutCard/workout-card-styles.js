@@ -15,6 +15,7 @@ const styles = theme => {
       justifyContent: "space-between"
     },
     cardName: {
+      cursor: "pointer",
       color: theme.palette.primary.main,
       fontWeight: "bold",
       fontSize: "1.2rem",
