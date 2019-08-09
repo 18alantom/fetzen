@@ -18,7 +18,8 @@ export const userKeys = {
 export const goalKeys = {
   title: "title",
   detail: "detail",
-  deadline: "deadline"
+  deadline: "deadline",
+  complete: "complete"
 };
 
 export const workoutKeys = {

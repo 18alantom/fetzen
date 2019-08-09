@@ -1,24 +1,7 @@
 import React from "react";
 import { withStyles } from "@material-ui/styles";
 import { useScrollTrigger, AppBar, Typography } from "@material-ui/core";
-
-const styles = theme => {
-  return {
-    title: {
-      fontFamily: theme.typography.titleFontFamily,
-      color: theme.palette.primary.main,
-      letterSpacing: "5px",
-      fontSize: "2rem",
-      padding: "8px 32px"
-    },
-    navbar: {
-      zIndex: theme.zIndex.drawer + 1,
-      background: theme.palette.secondary.dark,
-      height: "4rem",
-      gridArea: "navbar"
-    }
-  };
-};
+import styles from "./navbar-styles";
 
 const Navbar = props => {
   const trigger = useScrollTrigger({

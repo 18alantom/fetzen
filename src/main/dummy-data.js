@@ -9,10 +9,11 @@ class User {
 }
 
 class Goal {
-  constructor(title, detail, deadline) {
+  constructor(title, detail, deadline, complete = false) {
     this.title = title;
     this.detail = detail;
     this.deadline = deadline;
+    this.complete = complete;
   }
 }
 

@@ -1,49 +1,9 @@
 import React from "react";
 import { Typography, Collapse } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
-import { fade } from "@material-ui/core/styles/colorManipulator";
-import { getAvg, getMax } from "../../helpers/helpers";
-import { intensityUnits, setKeys } from "../../helpers/constants";
-
-const styles = theme => {
-  return {
-    container: {},
-    name: {
-      maxWidth: "170px",
-      whiteSpace: "nowrap",
-      overflow: "scroll"
-    },
-    titleBar: {
-      color: theme.palette.primary.main,
-      display: "flex",
-      justifyContent: "space-between",
-      marginTop: "8px"
-    },
-    detailContainer: {
-      color: theme.palette.primary.main,
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr 1fr",
-      gridTemplateAreas: `"avg rep set"`
-      // justifyContent: "space-between"
-    },
-    detailAvg: {
-      justifySelf: "start",
-      gridArea: "avg"
-    },
-    detailRep: {
-      justifySelf: "center",
-      gridArea: "rep"
-    },
-    detailSet: {
-      justifySelf: "end",
-      gridArea: "set"
-    },
-    divisor: {
-      borderColor: fade(theme.palette.primary.light, 0.4),
-      marginTop: "12px"
-    }
-  };
-};
+import { getAvg, getMax } from "../../../helpers/helpers";
+import { intensityUnits, setKeys } from "../../../helpers/constants";
+import styles from "./exercise-card-styles";
 
 class ExerciseCard extends React.Component {
   constructor(props) {
