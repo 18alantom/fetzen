@@ -1,6 +1,6 @@
 import React from "react";
 import ExerciseCard from "./ExerciseCard/ExerciseCard";
-import { Card, Dialog, Typography, Button, IconButton } from "@material-ui/core";
+import { Card, Typography, Button, IconButton } from "@material-ui/core";
 import { ExpandMore, ExpandLess } from "@material-ui/icons";
 import { withStyles } from "@material-ui/styles";
 import { getDay } from "../../helpers/helpers";
@@ -69,9 +69,7 @@ class WorkoutCard extends React.Component {
           </Button>
         </div>
         {/* Modal for an exercise to show individual sets */}
-        <Dialog open={exerciseModalOpen}>
-          <ExerciseModal exercise={workout[workoutKeys.exercises][openModal]} handleClose={this.handleExerciseModalClose} />
-        </Dialog>
+        <ExerciseModal open={exerciseModalOpen} exercise={workout[workoutKeys.exercises][openModal]} handleClose={this.handleExerciseModalClose} />
       </Card>
     );
   }

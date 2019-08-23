@@ -1,3 +1,4 @@
+const uuid = require('uuid/v1')
 class User {
   constructor(name, weight, height, goals, workouts) {
     this.name = name;
@@ -9,16 +10,19 @@ class User {
 }
 
 class Goal {
-  constructor(title, detail, deadline, complete = false) {
+  constructor(title, detail, deadline, complete = false, dateCompleted = undefined) {
+    this.id = uuid()
     this.title = title;
     this.detail = detail;
     this.deadline = deadline;
     this.complete = complete;
+    this.dateCompleted = dateCompleted;
   }
 }
 
 class Workout {
   constructor(name, days, exercises) {
+    this.id = uuid()
     this.name = name;
     this.days = days;
     this.exercises = exercises; // Array of exercise
@@ -28,6 +32,7 @@ class Workout {
 // units can be kg, lbs, knph, mph.
 class Exercise {
   constructor(name, sets, units = "kg", note = "") {
+    this.id = uuid()
     this.name = name;
     this.sets = sets;
     this.units = units;
@@ -38,6 +43,7 @@ class Exercise {
 // Sets is an exisiting class name
 class Cycle {
   constructor(intensity, reps, rest) {
+    this.id = uuid()
     this.intensity = intensity;
     this.reps = reps;
     this.rest = rest;
@@ -86,8 +92,8 @@ const legDlWorkout = new Workout("Legs (Dl)", [3], legDlExercises);
 const legSqWorkout = new Workout("Legs (Sq)", [6], legSqExercises);
 
 // Goals
-const benchGoal = new Goal("Dumbell Bench 40kg", "Reach a dumbell bench of 40kg for atleast 5 reps with good form.", "21/01/20");
-const deadliftGoal = new Goal("Deadlift 150kg", "Reach a deadlift (Romainian?) of 150kg for 3 reps with good form.", "21/01/20");
+const benchGoal = new Goal("Dumbell Bench 40kg", "Reach a dumbell bench of 40kg for atleast 5 reps with good form.", new Date(2020, 0, 21));
+const deadliftGoal = new Goal("Deadlift 150kg", "Reach a deadlift (Romainian?) of 150kg for 3 reps with good form.", new Date(2020, 1, 21));
 
 // User
 const alanTheUser = new User("Alan Tom", 76, 173, [benchGoal, deadliftGoal], [pushWorkout, pullWorkout, legDlWorkout, legSqWorkout]);

@@ -19,7 +19,8 @@ export const goalKeys = {
   title: "title",
   detail: "detail",
   deadline: "deadline",
-  complete: "complete"
+  complete: "complete",
+  dateCompleted: "dateCompleted"
 };
 
 export const workoutKeys = {

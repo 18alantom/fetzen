@@ -4,18 +4,20 @@ import Sidebar from "../Sidebar/Sidebar";
 import WorkoutCard from "../WorkoutCard/WorkoutCard";
 import { withStyles } from "@material-ui/styles";
 import styles from "./main-styles";
-import { Dialog } from "@material-ui/core";
 import WorkoutModal from "../Modals/Workouts/WorkoutModal/WorkoutModal";
+import userData from "../dummy-data";
 
 class Main extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       workoutModalOpen: false,
-      openModal: 0
+      openModal: 0,
+      data: userData
     };
     this.handleWorkoutModalOpen = this.handleWorkoutModalOpen.bind(this);
     this.handleWorkoutModalClose = this.handleWorkoutModalClose.bind(this);
+    this.handleGoalUpdate = this.handleGoalUpdate.bind(this);
   }
 
   handleWorkoutModalOpen(i) {
@@ -26,16 +28,32 @@ class Main extends React.Component {
     this.setState(({ workoutModalOpen }) => ({ workoutModalOpen: !workoutModalOpen }));
   }
 
+  handleGoalUpdate(id, done) {
+    console.log(id);
+    this.setState(({ data }) => {
+      let goal = data.goals.filter(g => g.id === id)[0];
+      console.log(goal);
+      if (done) {
+        goal.complete = true;
+        goal.dateCompleted = new Date();
+      } else if (!done) {
+        goal.complete = false;
+        goal.dateCompleted = undefined;
+      } else {
+        return;
+      }
+      return { data };
+    });
+  }
+
   render() {
-    const {
-      classes,
-      data: { goals, workouts }
-    } = this.props;
+    const { classes } = this.props;
+    const { goals, workouts } = this.state.data;
     const { workoutModalOpen, openModal } = this.state;
     return (
       <div className={classes.mainContainer}>
         <Navbar />
-        <Sidebar workouts={workouts} goals={goals} handleWorkoutModalOpen={this.handleWorkoutModalOpen} />
+        <Sidebar workouts={workouts} goals={goals} handleWorkoutModalOpen={this.handleWorkoutModalOpen} handleGoalUpdate={this.handleGoalUpdate} />
         <div className={classes.cardsContainer}>
           {workouts.map((w, i) => (
             <WorkoutCard
@@ -47,9 +65,7 @@ class Main extends React.Component {
             />
           ))}
         </div>
-        <Dialog open={workoutModalOpen}>
-          <WorkoutModal workout={workouts[openModal]} handleClose={this.handleWorkoutModalClose} />
-        </Dialog>
+        <WorkoutModal open={workoutModalOpen} workout={workouts[openModal]} handleClose={this.handleWorkoutModalClose} />
       </div>
     );
   }
