@@ -20,7 +20,7 @@ class ExerciseCard extends React.Component {
       <div className={classes.container} onClick={handleExerciseClick}>
         <div className={classes.titleBar}>
           <Typography className={classes.name}>{name}</Typography>
-          <Typography>{`Max ${getMax(exercise, setKeys.intensity)} ${intensityUnits[units]}`}</Typography>
+          <Typography>{`Max ${getMax(exercise, setKeys.intensity).toFixed(avgAccuracy)} ${intensityUnits[units]}`}</Typography>
         </div>
         <Collapse in={!collapsed}>
           <div className={classes.detailContainer}>

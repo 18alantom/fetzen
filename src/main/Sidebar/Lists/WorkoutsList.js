@@ -49,7 +49,7 @@ class WorkoutList extends React.Component {
             })}
           </List>
           <div className={classes.addButtonContainer}>
-            <IconButton className={classes.addButton} iaria-label="add-workout">
+            <IconButton className={classes.addButton} iaria-label="add-workout" size="small">
               <Add />
             </IconButton>
           </div>

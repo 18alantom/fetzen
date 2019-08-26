@@ -1,17 +1,9 @@
 import React from "react";
 import { goalKeys } from "../../../../helpers/constants";
 import { withStyles } from "@material-ui/styles";
-import { Typography, Button, Dialog } from "@material-ui/core";
+import { Typography, Button } from "@material-ui/core";
+import CustomDialog from "../../CustomDialog";
 import styles from "./goal-modal-styles";
-
-const CustomDialog = withStyles(theme => ({
-  root: {
-    "& .MuiPaper-rounded": {
-      borderRadius: "0px",
-      backgroundColor: theme.palette.secondary.main
-    }
-  }
-}))(Dialog);
 
 class GoalModal extends React.Component {
   render() {

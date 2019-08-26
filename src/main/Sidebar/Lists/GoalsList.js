@@ -81,7 +81,7 @@ class GoalsList extends React.Component {
             })}
           </List>
           <div className={classes.addButtonContainer}>
-            <IconButton className={classes.addButton} aria-label="add-goal" onClick={this.handleGoalAddClick}>
+            <IconButton className={classes.addButton} aria-label="add-goal" onClick={this.handleGoalAddClick} size="small">
               <Add />
             </IconButton>
           </div>

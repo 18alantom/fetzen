@@ -11,10 +11,6 @@ class Sidebar extends React.Component {
     const { classes, workouts, goals, handleWorkoutModalOpen, handleGoalUpdate } = this.props;
     const completedGoals = goals.filter(e => e.complete);
     const notCompletedGoals = goals.filter(e => !e.complete);
-    console.log("not completed");
-    console.log(notCompletedGoals);
-    console.log("completed");
-    console.log(completedGoals);
     return (
       <Drawer classes={{ paper: classes.paper }} variant="permanent">
         <div className={classes.allListContainer}>

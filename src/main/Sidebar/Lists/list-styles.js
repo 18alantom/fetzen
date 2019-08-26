@@ -10,6 +10,7 @@ const styles = theme => {
       fontSize: "0.8em",
       textTransform: "uppercase",
       cursor: "pointer",
+      fontWeight: "bold",
       // color: theme.palette.primary.main
       color: theme.palette.secondary.main
     },
