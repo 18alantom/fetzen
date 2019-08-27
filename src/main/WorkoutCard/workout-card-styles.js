@@ -1,3 +1,5 @@
+import { darken } from "@material-ui/core/styles/colorManipulator";
+
 const styles = theme => {
   return {
     card: {
@@ -22,7 +24,7 @@ const styles = theme => {
       padding: "0px"
     },
     cardDay: {
-      color: theme.palette.primary.main,
+      color: darken(theme.palette.primary.main, 0.2),
       fontSize: "1.2rem",
       padding: "0px"
     },
@@ -36,14 +38,9 @@ const styles = theme => {
       marginTop: "16px"
     },
     cardFooterButtons: {
-      color: theme.palette.primary.main,
+      color: darken(theme.palette.primary.main, 0.3),
       padding: "0px",
       minWidth: "0px"
-      // "& :focus, :active": {
-      //   outlineColor: fade(theme.palette.primary.main, 0.3),
-      //   outlineWidth: "thin",
-      //   outlineStyle: "solid"
-      // }
     },
     footerDone: {
       justifySelf: "start",

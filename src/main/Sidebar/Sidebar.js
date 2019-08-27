@@ -8,7 +8,7 @@ import styles from "./sidebar-styles";
 
 class Sidebar extends React.Component {
   render() {
-    const { classes, workouts, goals, handleWorkoutModalOpen, handleGoalUpdate } = this.props;
+    const { classes, workouts, goals, handleWorkoutModalOpen, handleGoalUpdate, handleGoalAdd } = this.props;
     const completedGoals = goals.filter(e => e.complete);
     const notCompletedGoals = goals.filter(e => !e.complete);
     return (
@@ -16,7 +16,7 @@ class Sidebar extends React.Component {
         <div className={classes.allListContainer}>
           <WorkoutsList workouts={workouts} handleWorkoutModalOpen={handleWorkoutModalOpen} />
           <Divider />
-          <GoalsList goals={notCompletedGoals} handleGoalUpdate={handleGoalUpdate} />
+          <GoalsList goals={notCompletedGoals} handleGoalUpdate={handleGoalUpdate} handleGoalAdd={handleGoalAdd} />
           <Divider />
           {completedGoals.length === 0 ? undefined : true && <GoalsCompletedList goals={completedGoals} handleGoalUpdate={handleGoalUpdate} />}
           {completedGoals.length === 0 ? undefined : true && <Divider />}

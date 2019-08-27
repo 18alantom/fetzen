@@ -1,54 +1,4 @@
-const uuid = require('uuid/v1')
-class User {
-  constructor(name, weight, height, goals, workouts) {
-    this.name = name;
-    this.weight = weight; // in kgs
-    this.height = height; // in centimeters
-    this.goals = goals; // Array of goals
-    this.workouts = workouts; // Array of workouts
-  }
-}
-
-class Goal {
-  constructor(title, detail, deadline, complete = false, dateCompleted = undefined) {
-    this.id = uuid()
-    this.title = title;
-    this.detail = detail;
-    this.deadline = deadline;
-    this.complete = complete;
-    this.dateCompleted = dateCompleted;
-  }
-}
-
-class Workout {
-  constructor(name, days, exercises) {
-    this.id = uuid()
-    this.name = name;
-    this.days = days;
-    this.exercises = exercises; // Array of exercise
-  }
-}
-
-// units can be kg, lbs, knph, mph.
-class Exercise {
-  constructor(name, sets, units = "kg", note = "") {
-    this.id = uuid()
-    this.name = name;
-    this.sets = sets;
-    this.units = units;
-    this.note = note;
-  }
-}
-
-// Sets is an exisiting class name
-class Cycle {
-  constructor(intensity, reps, rest) {
-    this.id = uuid()
-    this.intensity = intensity;
-    this.reps = reps;
-    this.rest = rest;
-  }
-}
+import { User, Exercise, Workout, Goal, Cycle } from "../helpers/classes";
 
 // All weights are stored in kg, in preferances
 // weights can be switched to lbs
@@ -70,7 +20,7 @@ const pullExercises = [
   new Exercise("Seated Cable Rows", [new Cycle(20, 15, 60), new Cycle(25, 12, 90), new Cycle(25, 12, 90)]),
   new Exercise("Facepull", [new Cycle(30, 15, 60), new Cycle(35, 12, 90), new Cycle(35, 12, 90)]),
   new Exercise("Bicep Curls", [new Cycle(10, 12, 60), new Cycle(12.5, 12, 90), new Cycle(10, 12, 90)]),
-  new Exercise("Hammer Curls", [new Cycle(60, 15, 60), new Cycle(70, 12, 90), new Cycle(70, 12, 90)])
+  new Exercise("Hammer Curls", [new Cycle(10, 15, 60), new Cycle(12.5, 12, 90), new Cycle(12.5, 12, 90)])
 ];
 const legDlExercises = [
   new Exercise("Romanian Deadlift", [new Cycle(90, 8, 90), new Cycle(110, 5, 120), new Cycle(120, 5, 120)]),

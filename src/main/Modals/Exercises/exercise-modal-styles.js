@@ -1,3 +1,5 @@
+import { darken } from "@material-ui/core/styles/colorManipulator";
+
 const styles = theme => {
   return {
     container: {
@@ -13,8 +15,8 @@ const styles = theme => {
       marginBottom: "16px"
     },
     setsCount: {
-      fontSize: "1.2rem",
-      color: theme.palette.primary.main
+      color: darken(theme.palette.primary.main, 0.2),
+      fontSize: "1.2rem"
     },
     setContainer: {
       display: "grid",
@@ -24,7 +26,7 @@ const styles = theme => {
     },
     setsContainer: {},
     index: {
-      color: theme.palette.primary.main,
+      color: darken(theme.palette.primary.main, 0.2),
       justifySelf: "start"
     },
     rest: {
@@ -41,12 +43,11 @@ const styles = theme => {
     buttonContainer: {
       marginTop: "8px",
       display: "flex",
-      // justifyContent: "space-between"
       justifyContent: "center"
     },
     button: {
-      padding: "0px",
-      color: theme.palette.primary.main
+      color: darken(theme.palette.primary.main, 0.3),
+      padding: "0px"
     }
   };
 };

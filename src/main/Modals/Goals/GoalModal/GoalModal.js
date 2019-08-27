@@ -8,11 +8,17 @@ import styles from "./goal-modal-styles";
 class GoalModal extends React.Component {
   render() {
     const { goal, handleNotDone, handleDone, open } = this.props;
-    console.log("from goalmodal");
-    console.log(goal);
     const { classes } = this.props;
     return (
-      <CustomDialog open={open} className={`${classes.paper}`}>
+      <CustomDialog
+        open={open}
+        className={`${classes.paper}`}
+        onKeyPress={e => {
+          if (e.key === "Enter") {
+            handleNotDone();
+          }
+        }}
+      >
         <div className={`${classes.container}`}>
           <Typography component="h2" className={`${classes.title}`}>
             {goal[goalKeys.title]}

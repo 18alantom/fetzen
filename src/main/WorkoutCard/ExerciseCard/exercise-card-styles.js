@@ -1,4 +1,4 @@
-import { fade } from "@material-ui/core/styles/colorManipulator";
+import { fade, darken } from "@material-ui/core/styles/colorManipulator";
 const styles = theme => {
   return {
     container: {
@@ -16,7 +16,7 @@ const styles = theme => {
       marginTop: "8px"
     },
     detailContainer: {
-      color: theme.palette.primary.main,
+      color: darken(theme.palette.primary.main, 0.2),
       display: "grid",
       gridTemplateColumns: "1fr 1fr 1fr",
       gridTemplateAreas: `"avg rep set"`
@@ -34,7 +34,7 @@ const styles = theme => {
       gridArea: "set"
     },
     divisor: {
-      borderColor: fade(theme.palette.primary.light, 0.4),
+      borderColor: fade(darken(theme.palette.primary.light, 0.4), 0.4),
       marginTop: "12px"
     }
   };

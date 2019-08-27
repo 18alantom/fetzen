@@ -4,7 +4,8 @@ const styles = theme => {
       backgroundColor: theme.palette.secondary.main,
       padding: "16px",
       textAlign: "center",
-      borderRadius: "1000px"
+      minWidth: "400px",
+      maxWidth: "700px"
     },
     title: {
       fontWeight: "bold",
@@ -18,7 +19,7 @@ const styles = theme => {
     deadline: {
       marginTop: "4px",
       color: theme.palette.primary.main,
-      fontSize: "0.8rem",
+      fontSize: "0.8rem"
     },
     buttonContainer: {
       marginTop: "16px",

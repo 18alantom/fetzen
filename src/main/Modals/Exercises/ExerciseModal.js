@@ -23,7 +23,14 @@ class ExerciseModal extends React.Component {
   render() {
     const { open, classes, exercise, handleClose } = this.props;
     return (
-      <CustomDialog open={open}>
+      <CustomDialog
+        open={open}
+        onKeyPress={e => {
+          if (e.key === "Enter") {
+            handleClose();
+          }
+        }}
+      >
         <div className={`${classes.container}`}>
           <div className={`${classes.header}`}>
             <Typography component="h2" className={`${classes.title}`}>

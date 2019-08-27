@@ -18,6 +18,7 @@ class Main extends React.Component {
     this.handleWorkoutModalOpen = this.handleWorkoutModalOpen.bind(this);
     this.handleWorkoutModalClose = this.handleWorkoutModalClose.bind(this);
     this.handleGoalUpdate = this.handleGoalUpdate.bind(this);
+    this.handleGoalAdd = this.handleGoalAdd.bind(this);
   }
 
   handleWorkoutModalOpen(i) {
@@ -29,10 +30,8 @@ class Main extends React.Component {
   }
 
   handleGoalUpdate(id, done) {
-    console.log(id);
     this.setState(({ data }) => {
       let goal = data.goals.filter(g => g.id === id)[0];
-      console.log(goal);
       if (done) {
         goal.complete = true;
         goal.dateCompleted = new Date();
@@ -46,6 +45,15 @@ class Main extends React.Component {
     });
   }
 
+  handleGoalAdd(goal) {
+    this.setState(({ data }) => {
+      console.log(data.goals);
+      data.goals.push(goal);
+      return data;
+    });
+    console.log(goal);
+  }
+
   render() {
     const { classes } = this.props;
     const { goals, workouts } = this.state.data;
@@ -53,7 +61,13 @@ class Main extends React.Component {
     return (
       <div className={classes.mainContainer}>
         <Navbar />
-        <Sidebar workouts={workouts} goals={goals} handleWorkoutModalOpen={this.handleWorkoutModalOpen} handleGoalUpdate={this.handleGoalUpdate} />
+        <Sidebar
+          workouts={workouts}
+          goals={goals}
+          handleWorkoutModalOpen={this.handleWorkoutModalOpen}
+          handleGoalUpdate={this.handleGoalUpdate}
+          handleGoalAdd={this.handleGoalAdd}
+        />
         <div className={classes.cardsContainer}>
           {workouts.map((w, i) => (
             <WorkoutCard

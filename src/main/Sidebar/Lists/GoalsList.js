@@ -54,7 +54,7 @@ class GoalsList extends React.Component {
     this.setState(({ expand }) => ({ expand: !expand }));
   }
   render() {
-    const { classes, goals } = this.props;
+    const { classes, goals, handleGoalAdd } = this.props;
     const { expand, goalAddModalOpen, goalModalOpen, openModal } = this.state;
     const goal = goals.filter(g => g.id === openModal)[0];
     return (
@@ -87,7 +87,7 @@ class GoalsList extends React.Component {
           </div>
         </Collapse>
         {goal && <GoalModal open={goalModalOpen} goal={goal} handleNotDone={this.handleGoalNotDone} handleDone={this.handleGoalDone} />}
-        <GoalAddModal open={goalAddModalOpen} handleClose={this.handleGoalAddModalClose} />
+        <GoalAddModal open={goalAddModalOpen} handleClose={this.handleGoalAddModalClose} handleGoalAdd={handleGoalAdd} />
       </div>
     );
   }

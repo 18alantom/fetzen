@@ -19,7 +19,7 @@ const styles = theme => {
       color: theme.palette.primary.light,
       fontWeight: "bold",
       textTransform: "uppercase",
-      letterSpacing: "5px"
+      letterSpacing: "4px"
     },
     textField: {
       marginBottom: "16px"
@@ -42,7 +42,8 @@ const styles = theme => {
     message: {
       textAlign: "center",
       textTransform: "uppercase",
-      fontSize: "0.8em"
+      fontSize: "0.8em",
+      letterSpacing: "1px"
     },
     error: {
       color: theme.palette.error[400]
