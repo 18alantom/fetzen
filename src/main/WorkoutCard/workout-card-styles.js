@@ -18,6 +18,7 @@ const styles = theme => {
     },
     cardName: {
       cursor: "pointer",
+      letterSpacing: "2px",
       color: theme.palette.primary.main,
       fontWeight: "bold",
       fontSize: "1.2rem",
