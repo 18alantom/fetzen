@@ -61,6 +61,12 @@ const styles = theme => {
     button: {
       color: darken(theme.palette.primary.main, 0.3),
       padding: "0px"
+    },
+    error: {
+      textAlign: "center",
+      textTransform: "uppercase",
+      fontSize: "0.8em",
+      letterSpacing: "1px"
     }
   };
 };

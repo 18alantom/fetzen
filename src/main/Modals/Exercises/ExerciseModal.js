@@ -209,7 +209,7 @@ class ExerciseModal extends React.Component {
               </Typography>
             </div>
             <Collapse in={error !== ""}>
-              <Typography component="p" className={`${classes.error}`}>
+              <Typography component="p" className={`${classes.error}`} color="error">
                 {error}
               </Typography>
             </Collapse>

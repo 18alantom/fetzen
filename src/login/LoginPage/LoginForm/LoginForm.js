@@ -1,6 +1,6 @@
 import React from "react";
 import { withStyles } from "@material-ui/styles";
-import { fade } from "@material-ui/core/styles/colorManipulator";
+import { fade, darken } from "@material-ui/core/styles/colorManipulator";
 import { Collapse, Link, Paper, Typography, TextField, Button } from "@material-ui/core";
 import styles from "./login-form-styles";
 
@@ -16,8 +16,15 @@ const CustomTextField = withStyles(theme => ({
     "& .MuiInput-underline:after": {
       borderBottom: `solid 2px ${theme.palette.primary.main}`
     },
+    "& .MuiInput-underline:hover:not($disabled):not($focused):not($error):before": {
+      height: "1px",
+      border: `1px solid ${darken(theme.palette.primary.main, 0.4)}`
+    },
     "& .MuiInputBase-input": {
       color: theme.palette.primary.light
+    },
+    "& .MuiInputBase-input::-webkit-inner-spin-button": {
+      appearance: "none"
     }
   }
 }))(TextField);
