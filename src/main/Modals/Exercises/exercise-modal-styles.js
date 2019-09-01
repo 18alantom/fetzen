@@ -43,7 +43,7 @@ const styles = theme => {
     buttonContainer: {
       marginTop: "8px",
       display: "flex",
-      justifyContent: "center"
+      justifyContent: "space-between"
     },
     button: {
       color: darken(theme.palette.primary.main, 0.3),

@@ -19,6 +19,7 @@ class WorkoutCard extends React.Component {
     this.handleCollapseButton = this.handleCollapseButton.bind(this);
     this.handleExerciseClick = this.handleExerciseClick.bind(this);
     this.handleExerciseModalClose = this.handleExerciseModalClose.bind(this);
+    this.handleExerciseUpdate = this.handleExerciseUpdate.bind(this);
   }
 
   handleExerciseClick(i) {
@@ -32,6 +33,12 @@ class WorkoutCard extends React.Component {
   handleCollapseButton() {
     this.setState(({ collapsed }) => ({ collapsed: !collapsed }));
   }
+
+  handleExerciseUpdate(eid, sets, note) {
+    const { handleExerciseUpdate, workout } = this.props;
+    handleExerciseUpdate(workout.id, eid, sets,note);
+  }
+
   render() {
     const { classes, workout, handleWorkoutModalOpen } = this.props;
     const { collapsed, openModal, exerciseModalOpen } = this.state;
@@ -68,8 +75,15 @@ class WorkoutCard extends React.Component {
             update
           </Button>
         </div>
-        {/* Modal for an exercise to show individual sets */}
-        <ExerciseModal open={exerciseModalOpen} exercise={workout[workoutKeys.exercises][openModal]} handleClose={this.handleExerciseModalClose} />
+        <ExerciseModal
+          open={exerciseModalOpen}
+          exercise={workout[workoutKeys.exercises][openModal]}
+          // Changing key causes component to unmount and nullifies the antipattern
+          // of copying props to state in the ExerciseModal component.
+          key={workout[workoutKeys.exercises][openModal].id}
+          handleClose={this.handleExerciseModalClose}
+          handleExerciseUpdate={this.handleExerciseUpdate}
+        />
       </Card>
     );
   }

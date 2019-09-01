@@ -5,6 +5,7 @@ import WorkoutCard from "../WorkoutCard/WorkoutCard";
 import { withStyles } from "@material-ui/styles";
 import styles from "./main-styles";
 import WorkoutModal from "../Modals/Workouts/WorkoutModal/WorkoutModal";
+import { userKeys, workoutKeys, exerciseKeys } from "../../helpers/constants";
 import userData from "../dummy-data";
 
 class Main extends React.Component {
@@ -17,6 +18,7 @@ class Main extends React.Component {
     };
     this.handleWorkoutModalOpen = this.handleWorkoutModalOpen.bind(this);
     this.handleWorkoutModalClose = this.handleWorkoutModalClose.bind(this);
+    this.handleExerciseUpdate = this.handleExerciseUpdate.bind(this);
     this.handleGoalUpdate = this.handleGoalUpdate.bind(this);
     this.handleGoalAdd = this.handleGoalAdd.bind(this);
   }
@@ -47,11 +49,21 @@ class Main extends React.Component {
 
   handleGoalAdd(goal) {
     this.setState(({ data }) => {
-      console.log(data.goals);
       data.goals.push(goal);
       return data;
     });
-    console.log(goal);
+  }
+
+  handleExerciseUpdate(wid, eid, sets, note) {
+    this.setState(({ data }) => {
+      // Objects are passed by reference
+      // that is why this works.
+      const workout = data[userKeys.workouts].filter(w => w.id === wid)[0];
+      const exercise = workout[workoutKeys.exercises].filter(e => e.id === eid)[0];
+      exercise[exerciseKeys.sets] = sets;
+      exercise[exerciseKeys.note] = note;
+      return data;
+    });
   }
 
   render() {
@@ -73,6 +85,7 @@ class Main extends React.Component {
             <WorkoutCard
               workout={w}
               key={i}
+              handleExerciseUpdate={this.handleExerciseUpdate}
               handleWorkoutModalOpen={() => {
                 this.handleWorkoutModalOpen(i);
               }}

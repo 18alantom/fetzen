@@ -86,7 +86,7 @@ class GoalsList extends React.Component {
             </IconButton>
           </div>
         </Collapse>
-        {goal && <GoalModal open={goalModalOpen} goal={goal} handleNotDone={this.handleGoalNotDone} handleDone={this.handleGoalDone} />}
+        {goal && <GoalModal open={goalModalOpen} goal={goal} handleNotDone={this.handleGoalNotDone} handleDone={this.handleGoalDone} handleClose={this.handleGoalModalClose}/>}
         <GoalAddModal open={goalAddModalOpen} handleClose={this.handleGoalAddModalClose} handleGoalAdd={handleGoalAdd} />
       </div>
     );
