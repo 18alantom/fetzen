@@ -7,6 +7,45 @@ import { IconButton, Collapse, TextField, Typography, Button, InputAdornment, Cl
 import styles from "./exercise-modal-styles";
 import CustomDialog from "../CustomDialog";
 import { Cycle } from "../../../helpers/classes";
+import { darken } from "@material-ui/core/styles/colorManipulator";
+
+// Custom Text Field to change the default colors.
+const CustomTextField1 = withStyles(theme => ({
+  root: {
+    "& .MuiInput-underline:before": {
+      borderBottom: "none"
+    },
+    "& .MuiInput-underline:hover:not($disabled):not($focused):not($error):before": {
+      height: "0px",
+      border: "none"
+    },
+    "& .MuiInput-underline:after": {
+      borderBottom: `solid 2px ${darken(theme.palette.primary.main, 0.2)}`
+    },
+    "& .MuiInputBase-input": {
+      color: theme.palette.primary.main,
+      textAlign: "end",
+      cursor: "pointer"
+    },
+    "& .MuiInputBase-root": {
+      cursor: "default"
+    },
+    "& .MuiInputBase-input::-webkit-inner-spin-button": {
+      appearance: "none"
+    },
+    "& .MuiTypography-colorTextSecondary": {
+      color: theme.palette.primary.dark
+    }
+  }
+}))(TextField);
+
+const CustomTextField2 = withStyles(theme => ({
+  root: {
+    "& .MuiInputBase-input": {
+      textAlign: "center"
+    }
+  }
+}))(CustomTextField1);
 
 const Set = withStyles(styles)(function(props) {
   function onChangeHandler(e) {
@@ -17,47 +56,49 @@ const Set = withStyles(styles)(function(props) {
     onSetUpdate(id, name, value);
   }
 
-  const { index, classes, units, set, collapsed } = props;
+  const { classes, units, set, collapsed, index } = props;
 
   return (
-    <div className={`${classes.setContainer}`}>
-      {!collapsed && <Typography className={`${classes.index}`}>{index}.</Typography>}
-      <TextField
-        className={`${classes.detail}`}
-        value={set[setKeys.intensity]}
-        name="intensity"
-        type="number"
-        onChange={onChangeHandler}
-        InputProps={{ endAdornment: <InputAdornment position="end">{units}</InputAdornment> }}
-      />
-      <TextField
-        className={`${classes.detail}`}
-        value={set[setKeys.reps]}
-        name="reps"
-        type="number"
-        onChange={onChangeHandler}
-        InputProps={{ endAdornment: <InputAdornment position="end">reps</InputAdornment> }}
-      />
-      <TextField
-        className={`${classes.rest} ${classes.detail}`}
-        value={set[setKeys.rest]}
-        name="rest"
-        type="number"
-        onChange={onChangeHandler}
-        InputProps={{ endAdornment: <InputAdornment position="end">s</InputAdornment> }}
-      />
-      {collapsed && (
-        <IconButton
-          disableRipple
-          size="small"
-          className={`${classes.button}`}
-          onClick={() => {
-            props.onAddRemoveClick(props.set.id);
-          }}
-        >
-          {props.onSetContentUpdate ? <Remove /> : <Add />}
-        </IconButton>
-      )}
+    <div className={`${classes.setContainerOuter}`}>
+      <Typography className={`${classes.index}`}>{index}.</Typography>
+      <div className={`${classes.setContainer}`}>
+        <CustomTextField1
+          className={`${classes.detail}`}
+          value={set[setKeys.intensity]}
+          name="intensity"
+          type="number"
+          onChange={onChangeHandler}
+          InputProps={{ endAdornment: <InputAdornment position="end">{units}</InputAdornment> }}
+        />
+        <CustomTextField1
+          className={`${classes.detail}`}
+          value={set[setKeys.reps]}
+          name="reps"
+          type="number"
+          onChange={onChangeHandler}
+          InputProps={{ endAdornment: <InputAdornment position="end">reps</InputAdornment> }}
+        />
+        <CustomTextField1
+          className={`${classes.rest} ${classes.detail}`}
+          value={set[setKeys.rest]}
+          name="rest"
+          type="number"
+          onChange={onChangeHandler}
+          InputProps={{ endAdornment: <InputAdornment position="end">s</InputAdornment> }}
+        />
+        {collapsed && (
+          <IconButton
+            disableRipple
+            size="small"
+            className={`${classes.button} ${classes.addRemoveButton}`}
+            onClick={() => {
+              props.onAddRemoveClick(props.set.id);
+            }}
+          >
+            {props.onSetContentUpdate ? <Remove /> : <Add />}
+          </IconButton>
+        )}
+      </div>
     </div>
   );
 });
@@ -113,11 +154,11 @@ class ExerciseModal extends React.Component {
   }
 
   handleCollapseButton() {
-    this.setState(({ collapsed }) => ({ collapsed: !collapsed }));
+    this.setState(({ collapsed }) => ({ collapsed: !collapsed, error: "" }));
   }
 
   handleNoteChange(e) {
-    this.setState({ note: e.target.value });
+    this.setState({ note: e.target.value, error: "" });
   }
 
   handleAddRemove(id) {
@@ -148,7 +189,6 @@ class ExerciseModal extends React.Component {
     const { open, classes, exercise } = this.props;
     const { collapsed, note, newSet, error, sets } = this.state;
     const { length } = sets;
-    console.log(error);
     return (
       <CustomDialog
         open={open}
@@ -178,8 +218,8 @@ class ExerciseModal extends React.Component {
               {sets.map((set, i) => (
                 <Set
                   key={i}
-                  index={i + 1}
                   set={set}
+                  index={i + 1}
                   units={exercise[exerciseKeys.units]}
                   onSetContentUpdate={this.handleSetChange}
                   collapsed={collapsed}
@@ -191,15 +231,23 @@ class ExerciseModal extends React.Component {
             <Collapse in={collapsed}>
               <div>
                 <Set
-                  index={length + 1}
                   set={newSet}
+                  index={length + 1}
                   units={exercise[exerciseKeys.units]}
                   onNewSetContentUpdate={this.handleNewSetChange}
                   onAddRemoveClick={this.handleAddRemove}
                   collapsed={collapsed}
                 />
               </div>
-              <TextField placeholder="Add a note" value={note} rowsMax="4" multiline onChange={this.handleNoteChange} fullWidth />
+              <CustomTextField2
+                placeholder="Add a note"
+                value={note}
+                rowsMax="4"
+                multiline
+                onChange={this.handleNoteChange}
+                fullWidth
+                className={`${classes.note}`}
+              />
             </Collapse>
 
             <div className={`${classes.buttonContainer}`}>

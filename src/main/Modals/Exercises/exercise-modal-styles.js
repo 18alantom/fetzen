@@ -6,7 +6,7 @@ const styles = theme => {
       backgroundColor: theme.palette.secondary.main,
       padding: "16px",
       textAlign: "center",
-      minWidth: "400px",
+      minWidth: "500px",
       maxWidth: "700px"
     },
     header: {
@@ -19,16 +19,11 @@ const styles = theme => {
       fontSize: "1.2rem"
     },
     setContainer: {
-      display: "grid",
-      gridRowGap: "88px",
-      gridTemplateColumns: "1fr 3fr 3fr 1fr",
+      display: "flex",
+      justifyContent: "space-between",
       marginTop: "8px"
     },
     setsContainer: {},
-    index: {
-      color: darken(theme.palette.primary.main, 0.2),
-      justifySelf: "start"
-    },
     rest: {
       justifySelf: "end"
     },
@@ -38,12 +33,30 @@ const styles = theme => {
       color: theme.palette.primary.main
     },
     detail: {
+      width: "80px",
       color: theme.palette.primary.main
     },
     buttonContainer: {
-      marginTop: "8px",
+      marginTop: "14px",
       display: "flex",
       justifyContent: "space-between"
+    },
+    addRemoveButton: {
+      marginTop: "4px",
+      height: "24px",
+      width: "24px"
+    },
+    note: {
+      margin: "12px 0px 8px 0px"
+    },
+    setContainerOuter: {
+      display: "grid",
+      gridTemplateColumns: "30px auto"
+    },
+    index: {
+      textAlign: "start",
+      marginTop: "14px",
+      color: darken(theme.palette.primary.main, 0.3)
     },
     button: {
       color: darken(theme.palette.primary.main, 0.3),
