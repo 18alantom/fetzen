@@ -137,6 +137,10 @@ class WorkoutModal extends React.Component {
               </Typography>
             </Collapse>
 
+            <Collapse in={collapsed}>
+              <hr className={`${classes.divisor} ${classes.topDivisor}`} />
+            </Collapse>
+
             <div className={`${classes.daysContainer}`}>
               <Typography component="p" className={`${classes.days}`}>
                 {daysString}
@@ -168,6 +172,7 @@ class WorkoutModal extends React.Component {
                     );
                   })}
                 </FormControl>
+                <hr className={classes.divisor} />
               </Collapse>
             </div>
 
@@ -184,11 +189,10 @@ class WorkoutModal extends React.Component {
               ))}
             </div>
 
-            {/* <Collapse in={collapsed}>
-              <div>
-                <AddExercise />
-              </div>
-            </Collapse> */}
+            <Collapse in={collapsed}>
+              <hr className={classes.divisor} />
+            </Collapse>
+
             <Collapse in={collapsed || note !== ""}>
               <CustomTextField2
                 placeholder="Add a note"
@@ -202,6 +206,7 @@ class WorkoutModal extends React.Component {
               />
             </Collapse>
             <Collapse in={collapsed}>
+              <hr className={`${classes.divisor} ${classes.topDivisor}`} />
               <div className={`${classes.buttonContainer}`}>
                 <LeftButton className={`${classes.button}`} onClick={() => {}}>
                   add an exercise

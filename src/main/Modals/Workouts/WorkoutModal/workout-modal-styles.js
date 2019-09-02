@@ -1,4 +1,4 @@
-import { darken } from "@material-ui/core/styles/colorManipulator";
+import { fade, darken } from "@material-ui/core/styles/colorManipulator";
 
 const styles = theme => {
   return {
@@ -12,11 +12,11 @@ const styles = theme => {
     header: {
       display: "flex",
       justifyContent: "space-between",
-      marginBottom: "16px"
+      marginBottom: "8px"
     },
     lastCompleted: {
       color: darken(theme.palette.primary.main, 0.2),
-      marginTop: "2px",
+      marginTop: "4px",
       fontSize: "1rem",
       letterSpacing: "2px"
     },
@@ -87,6 +87,14 @@ const styles = theme => {
       "&:hover": {
         backgroundColor: "transparent"
       }
+    },
+    divisor: {
+      borderColor: fade(darken(theme.palette.primary.light, 0.4), 0.4),
+      marginTop: "12px"
+    },
+    topDivisor: {
+      marginTop: "8px",
+      marginBottom: "16px"
     },
     error: {
       textAlign: "center",
