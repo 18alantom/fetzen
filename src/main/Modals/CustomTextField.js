@@ -26,4 +26,43 @@ const CustomTextField = withStyles(theme => ({
   }
 }))(TextField);
 
+// Custom Text Field to change the default colors.
+export const CustomTextField1 = withStyles(theme => ({
+  root: {
+    "& .MuiInput-underline:before": {
+      borderBottom: "none"
+    },
+    "& .MuiInput-underline:hover:not($disabled):not($focused):not($error):before": {
+      height: "0px",
+      border: "none"
+    },
+    "& .MuiInput-underline:after": {
+      borderBottom: `solid 2px ${darken(theme.palette.primary.main, 0.2)}`
+    },
+    "& .MuiInputBase-input": {
+      color: theme.palette.primary.main,
+      textAlign: "end",
+      cursor: "pointer"
+    },
+    "& .MuiInputBase-root": {
+      cursor: "default"
+    },
+    "& .MuiInputBase-input::-webkit-inner-spin-button": {
+      appearance: "none"
+    },
+    "& .MuiTypography-colorTextSecondary": {
+      color: theme.palette.primary.dark
+    }
+  }
+}))(TextField);
+
+export const CustomTextField2 = withStyles(theme => ({
+  root: {
+    "& .MuiInputBase-input": {
+      textAlign: "center",
+      cursor: "default"
+    }
+  }
+}))(CustomTextField1);
+
 export default CustomTextField;

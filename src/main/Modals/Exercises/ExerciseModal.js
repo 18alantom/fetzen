@@ -3,50 +3,11 @@ import clone from "clone";
 import { exerciseKeys, setKeys } from "../../../helpers/constants";
 import { withStyles } from "@material-ui/styles";
 import { ExpandMore, ExpandLess, Add, Remove } from "@material-ui/icons";
-import { IconButton, Collapse, TextField, Typography, Button, InputAdornment, ClickAwayListener } from "@material-ui/core";
+import { IconButton, Collapse, Typography, Button, InputAdornment, ClickAwayListener } from "@material-ui/core";
+import { CustomTextField1, CustomTextField2 } from "../CustomTextField";
+import { Cycle } from "../../../helpers/classes";
 import styles from "./exercise-modal-styles";
 import CustomDialog from "../CustomDialog";
-import { Cycle } from "../../../helpers/classes";
-import { darken } from "@material-ui/core/styles/colorManipulator";
-
-// Custom Text Field to change the default colors.
-const CustomTextField1 = withStyles(theme => ({
-  root: {
-    "& .MuiInput-underline:before": {
-      borderBottom: "none"
-    },
-    "& .MuiInput-underline:hover:not($disabled):not($focused):not($error):before": {
-      height: "0px",
-      border: "none"
-    },
-    "& .MuiInput-underline:after": {
-      borderBottom: `solid 2px ${darken(theme.palette.primary.main, 0.2)}`
-    },
-    "& .MuiInputBase-input": {
-      color: theme.palette.primary.main,
-      textAlign: "end",
-      cursor: "pointer"
-    },
-    "& .MuiInputBase-root": {
-      cursor: "default"
-    },
-    "& .MuiInputBase-input::-webkit-inner-spin-button": {
-      appearance: "none"
-    },
-    "& .MuiTypography-colorTextSecondary": {
-      color: theme.palette.primary.dark
-    }
-  }
-}))(TextField);
-
-const CustomTextField2 = withStyles(theme => ({
-  root: {
-    "& .MuiInputBase-input": {
-      textAlign: "center",
-      cursor: "default"
-    }
-  }
-}))(CustomTextField1);
 
 const Set = withStyles(styles)(function(props) {
   function onChangeHandler(e) {
@@ -190,7 +151,6 @@ class ExerciseModal extends React.Component {
     const { open, classes, exercise } = this.props;
     const { collapsed, note, newSet, error, sets } = this.state;
     const { length } = sets;
-    console.log(note === "");
     return (
       <CustomDialog
         open={open}

@@ -36,7 +36,7 @@ class WorkoutCard extends React.Component {
 
   handleExerciseUpdate(eid, sets, note) {
     const { handleExerciseUpdate, workout } = this.props;
-    handleExerciseUpdate(workout.id, eid, sets,note);
+    handleExerciseUpdate(workout.id, eid, sets, note);
   }
 
   render() {
@@ -48,7 +48,7 @@ class WorkoutCard extends React.Component {
           <Typography className={classes.cardName} onClick={handleWorkoutModalOpen}>
             {workout.name}
           </Typography>
-          <Typography className={classes.cardDay}>{getDay(workout)}</Typography>
+          <Typography className={classes.cardDay}>{getDay(workout[workoutKeys.days][0])}</Typography>
         </div>
         <div className={classes.cardExercises}>
           {workout.exercises.map((e, i) => {

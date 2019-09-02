@@ -1,5 +1,4 @@
-export const getDay = ({ days }) => {
-  const day = days[0];
+export const getDay = day => {
   switch (day) {
     case 0:
       return "Sun";
