@@ -42,7 +42,8 @@ const CustomTextField1 = withStyles(theme => ({
 const CustomTextField2 = withStyles(theme => ({
   root: {
     "& .MuiInputBase-input": {
-      textAlign: "center"
+      textAlign: "center",
+      cursor: "default"
     }
   }
 }))(CustomTextField1);
@@ -189,6 +190,7 @@ class ExerciseModal extends React.Component {
     const { open, classes, exercise } = this.props;
     const { collapsed, note, newSet, error, sets } = this.state;
     const { length } = sets;
+    console.log(note === "");
     return (
       <CustomDialog
         open={open}
@@ -239,6 +241,8 @@ class ExerciseModal extends React.Component {
                   collapsed={collapsed}
                 />
               </div>
+            </Collapse>
+            <Collapse in={collapsed || note !== ""}>
               <CustomTextField2
                 placeholder="Add a note"
                 value={note}
@@ -246,6 +250,7 @@ class ExerciseModal extends React.Component {
                 multiline
                 onChange={this.handleNoteChange}
                 fullWidth
+                disabled={!collapsed}
                 className={`${classes.note}`}
               />
             </Collapse>

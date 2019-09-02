@@ -36,10 +36,10 @@ const legSqExercises = [
 ];
 
 // Workouts week starts on 0 = sunday
-const pushWorkout = new Workout("Push", [1, 4], pushExercises);
-const pullWorkout = new Workout("Pull", [2, 5], pullExercises);
-const legDlWorkout = new Workout("Legs (Dl)", [3], legDlExercises);
-const legSqWorkout = new Workout("Legs (Sq)", [6], legSqExercises);
+const pushWorkout = new Workout("Push", [1, 4], pushExercises,new Date(2019,7,29));
+const pullWorkout = new Workout("Pull", [2, 5], pullExercises, new Date(2019,7,30));
+const legDlWorkout = new Workout("Legs (Dl)", [3], legDlExercises, new Date(2019,7,28));
+const legSqWorkout = new Workout("Legs (Sq)", [6], legSqExercises, new Date(2019,7,31));
 
 // Goals
 const benchGoal = new Goal("Dumbell Bench 40kg", "Reach a dumbell bench of 40kg for atleast 5 reps with good form.", new Date(2020, 0, 21));

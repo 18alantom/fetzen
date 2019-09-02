@@ -26,7 +26,9 @@ export const goalKeys = {
 export const workoutKeys = {
   name: "name",
   days: "days",
-  exercises: "exercises"
+  exercises: "exercises",
+  last: "last", // last completed
+  note: "note"
 };
 
 export const exerciseKeys = {

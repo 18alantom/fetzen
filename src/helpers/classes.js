@@ -24,11 +24,13 @@ export class Goal {
 }
 
 export class Workout {
-  constructor(name, days, exercises) {
+  constructor(name, days, exercises, last, note = "") {
     this.id = uuid();
     this.name = name;
     this.days = days;
     this.exercises = exercises; // Array of exercise
+    this.last = last;
+    this.note = note;
   }
 }
 
