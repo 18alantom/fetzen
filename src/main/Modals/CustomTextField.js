@@ -22,7 +22,7 @@ const CustomTextField = withStyles(theme => ({
     },
     "& .MuiInputBase-input::-webkit-inner-spin-button": {
       appearance: "none"
-    },
+    }
   }
 }))(TextField);
 
@@ -56,6 +56,7 @@ export const CustomTextField1 = withStyles(theme => ({
   }
 }))(TextField);
 
+// For notes in workout and exercise modals.
 export const CustomTextField2 = withStyles(theme => ({
   root: {
     "& .MuiInputBase-input": {
@@ -65,4 +66,27 @@ export const CustomTextField2 = withStyles(theme => ({
   }
 }))(CustomTextField1);
 
+// For titles in workout modals.
+export const CustomTextField3 = withStyles(theme => ({
+  root: {
+    "& .MuiInputBase-input": {
+      color: theme.palette.primary.main,
+      fontSize: "1.2rem",
+      letterSpacing: "2px",
+      fontWeight: "bold",
+      textAlign: "start",
+      cursor: "default"
+    }
+  }
+}))(CustomTextField1);
+
+// For titles in exercise modals.
+export const CustomTextField4 = withStyles(theme => ({
+  root: {
+    "& .MuiInputBase-input": {
+      fontWeight: "normal",
+      letterSpacing: "1px"
+    }
+  }
+}))(CustomTextField3);
 export default CustomTextField;

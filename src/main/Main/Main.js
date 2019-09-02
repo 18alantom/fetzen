@@ -54,7 +54,7 @@ class Main extends React.Component {
     });
   }
 
-  handleExerciseUpdate(wid, eid, sets, note) {
+  handleExerciseUpdate(wid, eid, sets, note, name) {
     this.setState(({ data }) => {
       // Objects are passed by reference
       // that is why this works.
@@ -62,6 +62,7 @@ class Main extends React.Component {
       const exercise = workout[workoutKeys.exercises].filter(e => e.id === eid)[0];
       exercise[exerciseKeys.sets] = sets;
       exercise[exerciseKeys.note] = note;
+      exercise[exerciseKeys.name] = name;
       return data;
     });
   }
@@ -92,7 +93,13 @@ class Main extends React.Component {
             />
           ))}
         </div>
-        <WorkoutModal open={workoutModalOpen} workout={workouts[openModal]} handleClose={this.handleWorkoutModalClose} />
+        <WorkoutModal
+          key={workouts[openModal].id}
+          wid={workouts[openModal].id}
+          open={workoutModalOpen}
+          workout={workouts[openModal]}
+          handleClose={this.handleWorkoutModalClose}
+        />
       </div>
     );
   }

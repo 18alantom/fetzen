@@ -4,7 +4,7 @@ import { exerciseKeys, setKeys } from "../../../helpers/constants";
 import { withStyles } from "@material-ui/styles";
 import { ExpandMore, ExpandLess, Add, Remove } from "@material-ui/icons";
 import { IconButton, Collapse, Typography, Button, InputAdornment, ClickAwayListener } from "@material-ui/core";
-import { CustomTextField1, CustomTextField2 } from "../CustomTextField";
+import { CustomTextField1, CustomTextField2, CustomTextField4 } from "../CustomTextField";
 import { Cycle } from "../../../helpers/classes";
 import styles from "./exercise-modal-styles";
 import CustomDialog from "../CustomDialog";
@@ -72,6 +72,7 @@ class ExerciseModal extends React.Component {
       error: "",
       sets: clone(this.props.exercise[exerciseKeys.sets]),
       note: this.props.exercise[exerciseKeys.note],
+      name: this.props.exercise[exerciseKeys.name],
       newSet: new Cycle(0, 0, 0),
       collapsed: false // collapsed = false means it is collapsed
     };
@@ -81,6 +82,7 @@ class ExerciseModal extends React.Component {
     this.updateAndClose = this.updateAndClose.bind(this);
     this.handleCollapseButton = this.handleCollapseButton.bind(this);
     this.handleNoteChange = this.handleNoteChange.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
     this.handleAddRemove = this.handleAddRemove.bind(this);
   }
 
@@ -103,15 +105,17 @@ class ExerciseModal extends React.Component {
   }
 
   restoreAndClose() {
-    this.setState({ sets: clone(this.props.exercise[exerciseKeys.sets]), collapsed: false, error: "" });
-    this.props.handleClose();
+    const { exercise, handleClose } = this.props;
+    const { sets, note, name } = exercise;
+    this.setState({ sets: clone(sets), note, name, collapsed: false, error: "" });
+    handleClose();
   }
 
   updateAndClose() {
     const { handleClose, handleExerciseUpdate, exercise } = this.props;
-    const { sets, note } = this.state;
+    const { sets, note, name } = this.state;
     this.setState({ collapsed: false, error: "" });
-    handleExerciseUpdate(exercise.id, sets, note);
+    handleExerciseUpdate(exercise.id, sets, note, name);
     handleClose();
   }
 
@@ -121,6 +125,10 @@ class ExerciseModal extends React.Component {
 
   handleNoteChange(e) {
     this.setState({ note: e.target.value, error: "" });
+  }
+
+  handleNameChange(e) {
+    this.setState({ name: e.target.value, error: "" });
   }
 
   handleAddRemove(id) {
@@ -149,7 +157,7 @@ class ExerciseModal extends React.Component {
 
   render() {
     const { open, classes, exercise } = this.props;
-    const { collapsed, note, newSet, error, sets } = this.state;
+    const { collapsed, note, newSet, error, sets, name } = this.state;
     const { length } = sets;
     return (
       <CustomDialog
@@ -163,9 +171,7 @@ class ExerciseModal extends React.Component {
         <ClickAwayListener onClickAway={this.restoreAndClose}>
           <div className={`${classes.container}`}>
             <div className={`${classes.header}`}>
-              <Typography component="h2" className={`${classes.title}`}>
-                {exercise[exerciseKeys.name]}
-              </Typography>
+              <CustomTextField4 className={`${classes.title}`} value={name} onChange={this.handleNameChange} disabled={!collapsed} />
               <Typography component="h3" className={`${classes.setsCount}`}>
                 {exercise[exerciseKeys.sets].length} sets
               </Typography>

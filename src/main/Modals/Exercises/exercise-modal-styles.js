@@ -28,9 +28,8 @@ const styles = theme => {
       justifySelf: "end"
     },
     title: {
-      fontWeight: "bold",
-      fontSize: "1.2rem",
-      color: theme.palette.primary.main
+      width: "300px",
+      padding: "0px"
     },
     detail: {
       width: "80px",
