@@ -41,7 +41,10 @@ const styles = theme => {
     cardFooterButtons: {
       color: darken(theme.palette.primary.main, 0.3),
       padding: "0px",
-      minWidth: "0px"
+      minWidth: "0px",
+      "&:hover": {
+        backgroundColor: "transparent"
+      }
     },
     footerDone: {
       justifySelf: "start",

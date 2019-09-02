@@ -10,7 +10,7 @@ const theme = createMuiTheme({
       main: grey[900]
     },
     success: green,
-    error: red
+    error: red,
   },
   typography: {
     fontFamily: "'Lato', 'sans-serif'",
@@ -18,7 +18,7 @@ const theme = createMuiTheme({
   }
 });
 
-document.getElementsByTagName('html')[0].style.backgroundColor = theme.palette.secondary.light;
-document.getElementsByTagName('body')[0].style.backgroundColor = theme.palette.secondary.light;
-document.getElementById('root').style.backgroundColor = theme.palette.secondary.light;
+document.getElementsByTagName("html")[0].style.backgroundColor = theme.palette.secondary.light;
+document.getElementsByTagName("body")[0].style.backgroundColor = theme.palette.secondary.light;
+document.getElementById("root").style.backgroundColor = theme.palette.secondary.light;
 export default theme;

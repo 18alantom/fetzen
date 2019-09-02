@@ -1,16 +1,18 @@
+import clone from "clone";
 import React from "react";
 import { workoutKeys, exerciseKeys } from "../../../../helpers/constants";
 import { withStyles } from "@material-ui/styles";
 import styles from "./workout-modal-styles";
 import CustomDialog from "../../CustomDialog";
-import { CustomTextField2 } from "../../CustomTextField";
 import { ExpandMore, ExpandLess, Remove } from "@material-ui/icons";
-import { Typography, IconButton, Button, ClickAwayListener, Collapse } from "@material-ui/core";
+import { Typography, FormControl, FormControlLabel, IconButton, ClickAwayListener, Collapse } from "@material-ui/core";
+import { CustomTextField2, CustomTextField3 } from "../../CustomTextField";
+import { CustomCheckbox } from "../../CustomCheckbox";
+import { LeftButton, RightButton } from "../../CustomButton";
 import { getDay } from "../../../../helpers/helpers";
 
-// TODO: Add a key to the workout modal component to force update on key change.
 const Exercise = withStyles(styles)(function(props) {
-  const { classes, index, id, name, onAddRemoveClick, collapsed } = props;
+  const { classes, index, id, name, onRemoveExerciseClick, collapsed } = props;
   return (
     <div className={`${classes.exercise} ${classes[`col${(index - 1) % 2}`]}`} component="li">
       <Typography component="p" className={`${classes.index}`}>
@@ -25,7 +27,7 @@ const Exercise = withStyles(styles)(function(props) {
           size="small"
           className={`${classes.button} ${classes.addRemoveButton}`}
           onClick={() => {
-            onAddRemoveClick(id);
+            onRemoveExerciseClick(id);
           }}
         >
           <Remove />
@@ -40,41 +42,90 @@ class WorkoutModal extends React.Component {
     super(props);
     this.state = {
       error: "",
+      name: this.props.workout[workoutKeys.name],
       note: this.props.workout[workoutKeys.note],
+      exercises: clone(this.props.workout[workoutKeys.exercises]),
+      days: clone(this.props.workout[workoutKeys.days]),
+      change: false,
       collapsed: false // collapsed = false means it is collapsed
     };
     this.handleCollapseButton = this.handleCollapseButton.bind(this);
-    this.handleAddRemove = this.handleAddRemove.bind(this);
+    this.handleRemoveExercise = this.handleRemoveExercise.bind(this);
+    this.handleNoteChange = this.handleNoteChange.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleDayChange = this.handleDayChange.bind(this);
+    this.updateAndClose = this.updateAndClose.bind(this);
+    this.restoreAndClose = this.restoreAndClose.bind(this);
   }
   handleCollapseButton() {
     this.setState(({ collapsed }) => ({ collapsed: !collapsed, error: "" }));
   }
 
-  handleAddRemove(id) {
-    console.log(id);
+  handleRemoveExercise(id) {
+    this.setState(({ exercises }) => {
+      let notToRemove = exercises.filter(ex => ex.id !== id);
+      if (exercises.length > 1) {
+        return { exercises: notToRemove };
+      } else {
+        return { error: "atleast one exercise is required" };
+      }
+    });
+  }
+
+  handleNoteChange(e) {
+    this.setState({ note: e.target.value, error: "", change: true });
+  }
+
+  handleNameChange(e) {
+    this.setState({ name: e.target.value, error: "", change: true });
+  }
+
+  updateAndClose() {
+    const { handleClose } = this.props;
+    handleClose();
+  }
+
+  restoreAndClose() {
+    const { handleClose, workout } = this.props;
+    const { name, note, exercises, days } = workout;
+    this.setState({ name, note, exercises: clone(exercises), days: clone(days), collapsed: false, error: "", change: false });
+    handleClose();
+  }
+
+  handleDayChange(e) {
+    const value = parseInt(e.target.value);
+    this.setState(({ days }) => {
+      let diff = days.filter(d => d !== value);
+      if (diff.length === days.length) {
+        days.push(value);
+        days.sort();
+        return { days, error: "", change: true };
+      } else if (diff.length < days.length && diff.length > 0) {
+        return { days: diff, error: "", change: true };
+      } else if (diff.length === 0) {
+        return { error: "atleast one day is required" };
+      }
+    });
   }
 
   render() {
-    const { open, classes, workout, handleClose } = this.props;
-    const { error, collapsed } = this.state;
-    const { note } = workout;
-    const days = workout[workoutKeys.days].map((d, i) => getDay(d)).join(" ");
+    const { open, classes, workout } = this.props;
+    const { error, collapsed, note, days, name, exercises, change } = this.state;
+    const daysString = days.map((d, i) => getDay(d)).join(" ");
     return (
       <CustomDialog
         open={open}
         onKeyPress={e => {
           if (e.key === "Enter") {
-            // this.updateAndClose();
-            handleClose();
+            this.updateAndClose();
           }
         }}
       >
-        <ClickAwayListener onClickAway={handleClose}>
+        <ClickAwayListener onClickAway={this.restoreAndClose}>
           <div className={`${classes.container}`}>
             <div className={`${classes.header}`}>
-              <Typography component="h2" className={`${classes.title}`}>
-                {workout[workoutKeys.name]}
-              </Typography>
+              <CustomTextField3 className={`${classes.title}`} value={name} disabled={!collapsed} onChange={this.handleNameChange} />
+
               <Typography component="h3" className={`${classes.lastCompleted}`}>
                 {workout[workoutKeys.last].toDateString()}
               </Typography>
@@ -88,13 +139,48 @@ class WorkoutModal extends React.Component {
 
             <div className={`${classes.daysContainer}`}>
               <Typography component="p" className={`${classes.days}`}>
-                {days}
+                {daysString}
               </Typography>
+              <Collapse in={collapsed}>
+                <FormControl className={`${classes.checkboxContainer}`}>
+                  {[...Array(7).keys()].map(i => {
+                    let checked = false;
+                    if (days.find(d => d === i) + 1) {
+                      checked = true;
+                    }
+                    return (
+                      <FormControlLabel
+                        className={classes.checkboxLabel}
+                        label={getDay(i)}
+                        key={i}
+                        control={
+                          <CustomCheckbox
+                            onChange={this.handleDayChange}
+                            checked={checked}
+                            value={i}
+                            color="primary"
+                            inputProps={{
+                              "aria-label": "primary checkbox"
+                            }}
+                          />
+                        }
+                      />
+                    );
+                  })}
+                </FormControl>
+              </Collapse>
             </div>
 
             <div className={`${classes.workoutContainer}`} component="ul">
-              {workout[workoutKeys.exercises].map((ex, i) => (
-                <Exercise key={i} name={ex[exerciseKeys.name]} id={ex.id} index={i + 1} collapsed={collapsed} onAddRemoveClick={this.handleAddRemove} />
+              {exercises.map((ex, i) => (
+                <Exercise
+                  key={i}
+                  name={ex[exerciseKeys.name]}
+                  id={ex.id}
+                  index={i + 1}
+                  collapsed={collapsed}
+                  onRemoveExerciseClick={this.handleRemoveExercise}
+                />
               ))}
             </div>
 
@@ -109,23 +195,33 @@ class WorkoutModal extends React.Component {
                 value={note}
                 rowsMax="4"
                 multiline
-                // onChange={this.handleNoteChange}
+                onChange={this.handleNoteChange}
                 fullWidth
                 disabled={!collapsed}
                 className={`${classes.note}`}
               />
             </Collapse>
+            <Collapse in={collapsed}>
+              <div className={`${classes.buttonContainer}`}>
+                <LeftButton className={`${classes.button}`} onClick={() => {}}>
+                  add an exercise
+                </LeftButton>
+                <RightButton className={`${classes.button}`} onClick={() => {}}>
+                  delete workout
+                </RightButton>
+              </div>
+            </Collapse>
 
             <div className={`${classes.buttonContainer}`}>
-              <Button className={`${classes.button}`} onClick={this.updateAndClose}>
+              <LeftButton className={`${classes.button}`} onClick={this.updateAndClose} disabled={!change}>
                 update
-              </Button>
+              </LeftButton>
               <IconButton disableRipple size="small" className={`${classes.button}`} onClick={this.handleCollapseButton}>
                 {collapsed ? <ExpandLess /> : <ExpandMore />}
               </IconButton>
-              <Button className={`${classes.button}`} onClick={handleClose}>
+              <RightButton className={`${classes.button}`} onClick={this.restoreAndClose}>
                 close
-              </Button>
+              </RightButton>
             </div>
           </div>
         </ClickAwayListener>

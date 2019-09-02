@@ -59,7 +59,13 @@ const styles = theme => {
     },
     button: {
       color: darken(theme.palette.primary.main, 0.3),
-      padding: "0px"
+      padding: "0px",
+      "&:disabled": {
+        color: theme.palette.secondary.main
+      },
+      "&:hover": {
+        backgroundColor: "transparent"
+      }
     },
     error: {
       textAlign: "center",

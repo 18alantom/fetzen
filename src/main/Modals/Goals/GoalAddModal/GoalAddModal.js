@@ -1,8 +1,9 @@
 import React from "react";
 import { withStyles } from "@material-ui/styles";
 import styles from "./goal-add-modal-styles";
-import { Collapse, Typography, Button, ClickAwayListener } from "@material-ui/core";
+import { Collapse, Typography, ClickAwayListener } from "@material-ui/core";
 import { Goal } from "../../../../helpers/classes";
+import { LeftButton, RightButton } from "../../CustomButton";
 import CustomDialog from "../../CustomDialog";
 import CustomTextField from "../../CustomTextField";
 
@@ -75,12 +76,12 @@ class GoalAddModal extends React.Component {
               </Typography>
             </Collapse>
             <div className={`${classes.buttonContainer}`}>
-              <Button className={`${classes.button}`} onClick={this.addGoalHandler}>
+              <LeftButton className={`${classes.button}`} onClick={this.addGoalHandler}>
                 add
-              </Button>
-              <Button className={`${classes.button}`} onClick={handleClose}>
+              </LeftButton>
+              <RightButton className={`${classes.button}`} onClick={handleClose}>
                 close
-              </Button>
+              </RightButton>
             </div>
           </div>
         </ClickAwayListener>

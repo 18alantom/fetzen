@@ -45,17 +45,23 @@ const styles = theme => {
       color: darken(theme.palette.primary.main, 0.3)
     },
     title: {
-      letterSpacing: "2px",
-      color: theme.palette.primary.main,
-      fontWeight: "bold",
-      fontSize: "1.2rem",
       padding: "0px"
     },
+    checkboxLabel: {
+      color: darken(theme.palette.primary.main, 0.3)
+    },
     daysContainer: {
-      display: "flex"
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "flex-start"
+    },
+    checkboxContainer: {
+      display: "flex",
+      flexDirection: "row"
     },
     days: {
       color: darken(theme.palette.primary.main, 0.2),
+      textAlign: "start",
       letterSpacing: "1px",
       fontSize: "0.9rem"
     },
@@ -74,7 +80,13 @@ const styles = theme => {
     },
     button: {
       color: darken(theme.palette.primary.main, 0.3),
-      padding: "0px"
+      padding: "0px",
+      "&:disabled": {
+        color: theme.palette.secondary.main
+      },
+      "&:hover": {
+        backgroundColor: "transparent"
+      }
     },
     error: {
       textAlign: "center",

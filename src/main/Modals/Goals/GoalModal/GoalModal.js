@@ -1,7 +1,8 @@
 import React from "react";
 import { goalKeys } from "../../../../helpers/constants";
 import { withStyles } from "@material-ui/styles";
-import { Typography, Button, ClickAwayListener } from "@material-ui/core";
+import { Typography, ClickAwayListener } from "@material-ui/core";
+import { LeftButton, RightButton } from "../../CustomButton";
 import CustomDialog from "../../CustomDialog";
 import styles from "./goal-modal-styles";
 
@@ -31,12 +32,12 @@ class GoalModal extends React.Component {
               <Typography className={`${classes.deadline}`}>{goal[goalKeys.deadline].toDateString()}</Typography>
             )}
             <div className={`${classes.buttonContainer}`}>
-              <Button className={`${classes.button}`} onClick={handleNotDone}>
+              <LeftButton className={`${classes.button}`} onClick={handleNotDone}>
                 not done
-              </Button>
-              <Button className={`${classes.button}`} onClick={handleDone}>
+              </LeftButton>
+              <RightButton className={`${classes.button}`} onClick={handleDone}>
                 done
-              </Button>
+              </RightButton>
             </div>
           </div>
         </ClickAwayListener>

@@ -61,7 +61,7 @@ export const CustomTextField2 = withStyles(theme => ({
   root: {
     "& .MuiInputBase-input": {
       textAlign: "center",
-      cursor: "default"
+      cursor: "pointer"
     }
   }
 }))(CustomTextField1);
@@ -75,7 +75,7 @@ export const CustomTextField3 = withStyles(theme => ({
       letterSpacing: "2px",
       fontWeight: "bold",
       textAlign: "start",
-      cursor: "default"
+      cursor: "pointer"
     }
   }
 }))(CustomTextField1);

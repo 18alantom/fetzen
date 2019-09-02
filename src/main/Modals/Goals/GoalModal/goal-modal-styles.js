@@ -1,3 +1,5 @@
+import { darken } from "@material-ui/core/styles/colorManipulator";
+
 const styles = theme => {
   return {
     container: {
@@ -18,7 +20,7 @@ const styles = theme => {
     },
     deadline: {
       marginTop: "4px",
-      color: theme.palette.primary.main,
+      color: darken(theme.palette.primary.main, 0.2),
       fontSize: "0.8rem"
     },
     buttonContainer: {
@@ -28,7 +30,10 @@ const styles = theme => {
     },
     button: {
       padding: "0px",
-      color: theme.palette.primary.main
+      color: darken(theme.palette.primary.main, 0.3),
+      "&:hover": {
+        backgroundColor: "transparent"
+      }
     }
   };
 };

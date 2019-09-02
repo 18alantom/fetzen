@@ -3,9 +3,10 @@ import clone from "clone";
 import { exerciseKeys, setKeys } from "../../../helpers/constants";
 import { withStyles } from "@material-ui/styles";
 import { ExpandMore, ExpandLess, Add, Remove } from "@material-ui/icons";
-import { IconButton, Collapse, Typography, Button, InputAdornment, ClickAwayListener } from "@material-ui/core";
+import { IconButton, Collapse, Typography, InputAdornment, ClickAwayListener } from "@material-ui/core";
 import { CustomTextField1, CustomTextField2, CustomTextField4 } from "../CustomTextField";
 import { Cycle } from "../../../helpers/classes";
+import { LeftButton, RightButton } from "../CustomButton";
 import styles from "./exercise-modal-styles";
 import CustomDialog from "../CustomDialog";
 
@@ -74,7 +75,8 @@ class ExerciseModal extends React.Component {
       note: this.props.exercise[exerciseKeys.note],
       name: this.props.exercise[exerciseKeys.name],
       newSet: new Cycle(0, 0, 0),
-      collapsed: false // collapsed = false means it is collapsed
+      collapsed: false, // collapsed = false means it is collapsed
+      change: false
     };
     this.handleSetChange = this.handleSetChange.bind(this);
     this.handleNewSetChange = this.handleNewSetChange.bind(this);
@@ -93,7 +95,7 @@ class ExerciseModal extends React.Component {
           s[name] = parseFloat(value);
         }
       });
-      return { sets };
+      return { sets, change: true };
     });
   }
 
@@ -107,14 +109,14 @@ class ExerciseModal extends React.Component {
   restoreAndClose() {
     const { exercise, handleClose } = this.props;
     const { sets, note, name } = exercise;
-    this.setState({ sets: clone(sets), note, name, collapsed: false, error: "" });
+    this.setState({ sets: clone(sets), note, name, collapsed: false, error: "", change: false });
     handleClose();
   }
 
   updateAndClose() {
     const { handleClose, handleExerciseUpdate, exercise } = this.props;
     const { sets, note, name } = this.state;
-    this.setState({ collapsed: false, error: "" });
+    this.setState({ collapsed: false, error: "", change: false });
     handleExerciseUpdate(exercise.id, sets, note, name);
     handleClose();
   }
@@ -124,11 +126,11 @@ class ExerciseModal extends React.Component {
   }
 
   handleNoteChange(e) {
-    this.setState({ note: e.target.value, error: "" });
+    this.setState({ note: e.target.value, error: "", changel: true });
   }
 
   handleNameChange(e) {
-    this.setState({ name: e.target.value, error: "" });
+    this.setState({ name: e.target.value, error: "", change: true });
   }
 
   handleAddRemove(id) {
@@ -144,10 +146,10 @@ class ExerciseModal extends React.Component {
           error = "rest can't be 0";
         } else {
           sets.push(newSet);
-          return { sets, newSet: new Cycle(0, 0, 0) };
+          return { sets, newSet: new Cycle(0, 0, 0), change: true };
         }
       } else if (sets.length > 1) {
-        return { sets: toNotRemove };
+        return { sets: toNotRemove, change: true };
       } else if (sets.length === 1) {
         error = "atleast one set is required";
       }
@@ -157,7 +159,7 @@ class ExerciseModal extends React.Component {
 
   render() {
     const { open, classes, exercise } = this.props;
-    const { collapsed, note, newSet, error, sets, name } = this.state;
+    const { collapsed, note, newSet, error, sets, name, change } = this.state;
     const { length } = sets;
     return (
       <CustomDialog
@@ -222,15 +224,15 @@ class ExerciseModal extends React.Component {
             </Collapse>
 
             <div className={`${classes.buttonContainer}`}>
-              <Button className={`${classes.button}`} onClick={this.updateAndClose}>
+              <LeftButton className={`${classes.button}`} onClick={this.updateAndClose} disabled={!change}>
                 update
-              </Button>
+              </LeftButton>
               <IconButton disableRipple size="small" className={`${classes.button}`} onClick={this.handleCollapseButton}>
                 {collapsed ? <ExpandLess /> : <ExpandMore />}
               </IconButton>
-              <Button className={`${classes.button}`} onClick={this.restoreAndClose}>
+              <RightButton style={{ textAlign: "left" }} className={`${classes.button}`} onClick={this.restoreAndClose}>
                 close
-              </Button>
+              </RightButton>
             </div>
           </div>
         </ClickAwayListener>
