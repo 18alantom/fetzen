@@ -18,6 +18,11 @@ const styles = theme => {
       marginRight: "15%",
       gridArea: "cards",
       background: theme.palette.secondary.light
+    },
+    snackText: {
+      minWidth: 0,
+      letterSpacing: "1px",
+      color: theme.palette.primary.light
     }
   };
 };

@@ -20,6 +20,7 @@ class WorkoutCard extends React.Component {
     this.handleExerciseClick = this.handleExerciseClick.bind(this);
     this.handleExerciseModalClose = this.handleExerciseModalClose.bind(this);
     this.handleExerciseUpdate = this.handleExerciseUpdate.bind(this);
+    this.handleDoneButton = this.handleDoneButton.bind(this);
   }
 
   handleExerciseClick(i) {
@@ -37,6 +38,11 @@ class WorkoutCard extends React.Component {
   handleExerciseUpdate(eid, sets, note, name) {
     const { handleExerciseUpdate, workout } = this.props;
     handleExerciseUpdate(workout.id, eid, sets, note, name);
+  }
+
+  handleDoneButton() {
+    const { handleDoneClick, workout } = this.props;
+    handleDoneClick(workout.id);
   }
 
   render() {
@@ -65,7 +71,7 @@ class WorkoutCard extends React.Component {
           })}
         </div>
         <div className={classes.cardFooter}>
-          <Button size="small" disableRipple className={`${classes.cardFooterButtons} ${classes.footerDone}`}>
+          <Button size="small" disableRipple className={`${classes.cardFooterButtons} ${classes.footerDone}`} onClick={this.handleDoneButton}>
             done
           </Button>
           <IconButton disableRipple size="small" className={`${classes.cardFooterButtons} ${classes.footerResize}`} onClick={this.handleCollapseButton}>

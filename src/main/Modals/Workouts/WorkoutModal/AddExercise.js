@@ -29,6 +29,8 @@ export const AddExercise = withStyles(styles)(
       this.handleAdd = this.handleAdd.bind(this);
       this.handleCancel = this.handleCancel.bind(this);
       this.stateReset = this.stateReset.bind(this);
+      // Refs
+      this.exerciseNameRef = React.createRef();
     }
 
     handleSetChange(id, name, value) {
@@ -107,6 +109,10 @@ export const AddExercise = withStyles(styles)(
       const { open, classes } = this.props;
       const { error, name, sets, note, newSet, units } = this.state;
       const { length } = sets;
+      if (open) {
+        // Focus on the exercise title input.
+        setTimeout(() => this.exerciseNameRef.current.getElementsByTagName("input")[0].focus(), 300);
+      }
       return (
         <Collapse in={open}>
           <Typography component="h2" className={`${classes.subTitle}`}>
@@ -114,7 +120,13 @@ export const AddExercise = withStyles(styles)(
           </Typography>
 
           <div className={`${classes.header}`}>
-            <CustomTextField4 className={`${classes.exerciseAddTitle}`} value={name} onChange={this.handleNameChange} placeholder="Exercise name" />
+            <CustomTextField4
+              className={`${classes.exerciseAddTitle}`}
+              value={name}
+              onChange={this.handleNameChange}
+              placeholder="Exercise name"
+              ref={this.exerciseNameRef}
+            />
             <Typography component="h3" className={`${classes.setsCount}`}>
               {length} sets
             </Typography>
