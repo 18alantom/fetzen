@@ -8,13 +8,13 @@ import { LeftButton, RightButton } from "../../CustomButton";
 import { getDay } from "../../../../helpers/helpers";
 
 export const Days = withStyles(styles)(function(props) {
-  const { classes, daysString, collapsed, days, handleDayChange } = props;
+  const { classes, daysString, open, days, handleDayChange } = props;
   return (
     <div className={`${classes.daysContainer}`}>
       <Typography component="p" className={`${classes.days}`}>
         {daysString}
       </Typography>
-      <Collapse in={collapsed}>
+      <Collapse in={open}>
         <FormControl className={`${classes.checkboxContainer}`}>
           {[...Array(7).keys()].map(i => {
             let checked = false;
@@ -48,11 +48,14 @@ export const Days = withStyles(styles)(function(props) {
 });
 
 export const AreYouSure = withStyles(styles)(function(props) {
-  const { name, classes, confirmDelete, collapsed, handleDeleteChoice } = props;
+  const { name, classes, open, handleDeleteChoice } = props;
   return (
-    <Collapse in={confirmDelete && collapsed}>
+    <Collapse in={open}>
+      <Typography component="h2" className={`${classes.subTitle}`}>
+        Delete Workout
+      </Typography>
       <Typography component="p" className={`${classes.areYouSure}`}>
-        {`Are you sure you want to delete the workout ${name}, this action can't be undone.`}
+        {`Are you sure you want to delete the workout '${name}', this action can't be undone.`}
       </Typography>
       <div className={`${classes.buttonContainer}`}>
         <LeftButton

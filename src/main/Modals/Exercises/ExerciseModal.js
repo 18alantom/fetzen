@@ -10,12 +10,18 @@ import { LeftButton, RightButton } from "../CustomButton";
 import styles from "./exercise-modal-styles";
 import CustomDialog from "../CustomDialog";
 
-const Set = withStyles(styles)(function(props) {
+export const Set = withStyles(styles)(function(props) {
   function onChangeHandler(e) {
-    const { name, value } = e.target;
+    let { value } = e.target;
+    const { name } = e.target;
     const { onSetContentUpdate, onNewSetContentUpdate } = props;
     const { id } = props.set;
     const onSetUpdate = onSetContentUpdate || onNewSetContentUpdate;
+    if (isNaN(parseFloat(value))) {
+      value = 0;
+    } else {
+      value = parseFloat(value);
+    }
     onSetUpdate(id, name, value);
   }
 
@@ -92,7 +98,7 @@ class ExerciseModal extends React.Component {
     this.setState(({ sets }) => {
       sets.forEach(s => {
         if (s.id === id) {
-          s[name] = parseFloat(value);
+          s[name] = value;
         }
       });
       return { sets, change: true };
@@ -101,7 +107,7 @@ class ExerciseModal extends React.Component {
 
   handleNewSetChange(id, name, value) {
     this.setState(({ newSet }) => {
-      newSet[name] = parseFloat(value);
+      newSet[name] = value;
       return { newSet };
     });
   }
@@ -126,7 +132,7 @@ class ExerciseModal extends React.Component {
   }
 
   handleNoteChange(e) {
-    this.setState({ note: e.target.value, error: "", changel: true });
+    this.setState({ note: e.target.value, error: "", change: true });
   }
 
   handleNameChange(e) {
@@ -175,7 +181,7 @@ class ExerciseModal extends React.Component {
             <div className={`${classes.header}`}>
               <CustomTextField4 className={`${classes.title}`} value={name} onChange={this.handleNameChange} disabled={!collapsed} />
               <Typography component="h3" className={`${classes.setsCount}`}>
-                {exercise[exerciseKeys.sets].length} sets
+                {length} sets
               </Typography>
             </div>
             <Collapse in={error !== ""}>
@@ -192,8 +198,8 @@ class ExerciseModal extends React.Component {
                   index={i + 1}
                   units={exercise[exerciseKeys.units]}
                   onSetContentUpdate={this.handleSetChange}
-                  collapsed={collapsed}
                   onAddRemoveClick={this.handleAddRemove}
+                  collapsed={collapsed}
                 />
               ))}
             </div>

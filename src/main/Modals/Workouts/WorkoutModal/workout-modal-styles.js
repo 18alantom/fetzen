@@ -47,6 +47,14 @@ const styles = theme => {
     title: {
       padding: "0px"
     },
+    exerciseAddTitle: {
+      width: "300px",
+      padding: "0px"
+    },
+    setsCount: {
+      color: darken(theme.palette.primary.main, 0.2),
+      fontSize: "1.2rem"
+    },
     checkboxLabel: {
       color: darken(theme.palette.primary.main, 0.3)
     },
@@ -69,6 +77,11 @@ const styles = theme => {
       marginTop: "14px",
       display: "flex",
       justifyContent: "space-between"
+    },
+    buttonContainerThree: {
+      marginTop: "14px",
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr 1fr"
     },
     addRemoveButton: {
       marginLeft: "auto",
@@ -97,7 +110,7 @@ const styles = theme => {
       marginTop: "12px"
     },
     areYouSure: {
-      color: theme.palette.primary.main,
+      color: darken(theme.palette.primary.main, 0.1),
       fontSize: "1rem",
       minWidth: "10%",
       maxWidth: "80%",
@@ -112,6 +125,12 @@ const styles = theme => {
       textTransform: "uppercase",
       fontSize: "0.8em",
       letterSpacing: "1px"
+    },
+    subTitle: {
+      color: darken(theme.palette.primary.main, 0.3),
+      fontSize: "1.1rem",
+      letterSpacing: "1px",
+      marginBottom: "8px"
     }
   };
 };
