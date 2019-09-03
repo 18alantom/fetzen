@@ -6,7 +6,7 @@ const styles = theme => {
       backgroundColor: theme.palette.secondary.main,
       padding: "16px",
       textAlign: "center",
-      minWidth: "500px",
+      minWidth: "600px",
       maxWidth: "700px"
     },
     header: {

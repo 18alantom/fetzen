@@ -38,6 +38,8 @@ class WorkoutModal extends React.Component {
     this.handleCancelAddExercise = this.handleCancelAddExercise.bind(this);
     this.updateAndClose = this.updateAndClose.bind(this);
     this.restoreAndClose = this.restoreAndClose.bind(this);
+    // Refs
+    this.workoutNameRef = React.createRef();
   }
   handleCollapseButton() {
     this.setState(({ collapsed }) => ({ collapsed: !collapsed, error: "" }));
@@ -63,8 +65,23 @@ class WorkoutModal extends React.Component {
   }
 
   updateAndClose() {
-    const { handleClose } = this.props;
-    handleClose();
+    const { handleClose, wid, handleWorkoutUpdate } = this.props;
+    const { name, note, exercises, days } = this.state;
+    if (name === "") {
+      this.setState({ collapsed: true, error: "name can't be blank" });
+      this.workoutNameRef.current.getElementsByTagName("input")[0].focus();
+      return;
+    } else {
+      handleWorkoutUpdate(wid, name, note, exercises, days);
+      this.setState({
+        collapsed: false,
+        error: "",
+        change: false,
+        confirmDelete: false,
+        addExercise: false
+      });
+      handleClose();
+    }
   }
 
   restoreAndClose() {
@@ -107,6 +124,7 @@ class WorkoutModal extends React.Component {
   handleDeleteChoice(choice) {
     this.setState({ confirmDelete: false });
     if (choice) {
+      this.props.handleDeleteWorkoutConfirm(this.props.wid);
       this.props.handleClose();
     }
   }
@@ -142,6 +160,7 @@ class WorkoutModal extends React.Component {
           <div className={`${classes.container}`}>
             <div className={`${classes.header}`}>
               <CustomTextField3
+                ref={this.workoutNameRef}
                 className={`${classes.title}`}
                 value={name}
                 disabled={!collapsed && !(addExercise || confirmDelete)}

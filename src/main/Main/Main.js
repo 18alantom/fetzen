@@ -8,7 +8,6 @@ import WorkoutModal from "../Modals/Workouts/WorkoutModal/WorkoutModal";
 import { userKeys, workoutKeys, exerciseKeys } from "../../helpers/constants";
 import userData from "../dummy-data";
 
-
 class Main extends React.Component {
   constructor(props) {
     super(props);
@@ -19,6 +18,8 @@ class Main extends React.Component {
     };
     this.handleWorkoutModalOpen = this.handleWorkoutModalOpen.bind(this);
     this.handleWorkoutModalClose = this.handleWorkoutModalClose.bind(this);
+    this.handleDeleteWorkoutConfirm = this.handleDeleteWorkoutConfirm.bind(this);
+    this.handleWorkoutUpdate = this.handleWorkoutUpdate.bind(this);
     this.handleExerciseUpdate = this.handleExerciseUpdate.bind(this);
     this.handleGoalUpdate = this.handleGoalUpdate.bind(this);
     this.handleGoalAdd = this.handleGoalAdd.bind(this);
@@ -44,6 +45,28 @@ class Main extends React.Component {
       } else {
         return;
       }
+      return { data };
+    });
+  }
+
+  handleDeleteWorkoutConfirm(id) {
+    this.setState(({ data }) => {
+      const { workouts } = data;
+      data.workouts = workouts.filter(w => w.id !== id);
+      return { data, openModal: 0 };
+    });
+  }
+
+  handleWorkoutUpdate(wid, name, note, exercises, days) {
+    this.setState(({ data }) => {
+      data.workouts.forEach(w => {
+        if (w.id === wid) {
+          w[workoutKeys.name] = name;
+          w[workoutKeys.note] = note;
+          w[workoutKeys.exercises] = exercises;
+          w[workoutKeys.days] = days;
+        }
+      });
       return { data };
     });
   }
@@ -94,13 +117,17 @@ class Main extends React.Component {
             />
           ))}
         </div>
-        <WorkoutModal
-          key={workouts[openModal].id}
-          wid={workouts[openModal].id}
-          open={workoutModalOpen}
-          workout={workouts[openModal]}
-          handleClose={this.handleWorkoutModalClose}
-        />
+        {workouts.length !== 0 && (
+          <WorkoutModal
+            key={workouts[openModal].id}
+            wid={workouts[openModal].id}
+            open={workoutModalOpen} // boolean to open the modal
+            workout={workouts[openModal]} // the workout object that will be displayed
+            handleWorkoutUpdate={this.handleWorkoutUpdate}
+            handleDeleteWorkoutConfirm={this.handleDeleteWorkoutConfirm}
+            handleClose={this.handleWorkoutModalClose}
+          />
+        )}
       </div>
     );
   }

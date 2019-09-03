@@ -62,9 +62,7 @@ export const AddExercise = withStyles(styles)(
         let error = "";
         const toNotRemove = sets.filter(s => s.id !== id);
         if (toNotRemove.length === sets.length) {
-          if (newSet[setKeys.intensity] === 0) {
-            error = "intensity can't be 0";
-          } else if (newSet[setKeys.reps] === 0) {
+          if (newSet[setKeys.reps] === 0) {
             error = "reps can't be 0";
           } else if (newSet[setKeys.rest] === 0) {
             error = "rest can't be 0";
