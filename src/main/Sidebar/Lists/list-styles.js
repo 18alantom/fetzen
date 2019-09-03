@@ -1,3 +1,4 @@
+import { fade } from "@material-ui/core/styles/colorManipulator";
 const styles = theme => {
   return {
     titleContainer: {
@@ -20,7 +21,11 @@ const styles = theme => {
       margin: "8px 8px 8px 0px",
       color: theme.palette.secondary.main,
       padding: "0px",
-      minWidth: "0px"
+      minWidth: "0px",
+      "&:focus": {
+        backgroundColor: fade(theme.palette.secondary.main, 0.25),
+        color: theme.palette.secondary.main
+      }
     },
 
     list: {

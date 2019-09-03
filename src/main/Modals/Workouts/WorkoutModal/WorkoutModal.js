@@ -4,107 +4,12 @@ import { workoutKeys, exerciseKeys } from "../../../../helpers/constants";
 import { withStyles } from "@material-ui/styles";
 import styles from "./workout-modal-styles";
 import CustomDialog from "../../CustomDialog";
-import { ExpandMore, ExpandLess, Remove } from "@material-ui/icons";
-import { Typography, FormControl, FormControlLabel, IconButton, ClickAwayListener, Collapse } from "@material-ui/core";
+import { ExpandMore, ExpandLess } from "@material-ui/icons";
+import { Typography, IconButton, ClickAwayListener, Collapse } from "@material-ui/core";
 import { CustomTextField2, CustomTextField3 } from "../../CustomTextField";
-import { CustomCheckbox } from "../../CustomCheckbox";
+import { Days, AreYouSure, Exercise } from "./WorkoutModalComponents";
 import { LeftButton, RightButton } from "../../CustomButton";
 import { getDay } from "../../../../helpers/helpers";
-
-const Days = withStyles(styles)(function(props) {
-  const { classes, daysString, collapsed, days, handleDayChange } = props;
-  return (
-    <div className={`${classes.daysContainer}`}>
-      <Typography component="p" className={`${classes.days}`}>
-        {daysString}
-      </Typography>
-      <Collapse in={collapsed}>
-        <FormControl className={`${classes.checkboxContainer}`}>
-          {[...Array(7).keys()].map(i => {
-            let checked = false;
-            if (days.find(d => d === i) + 1) {
-              checked = true;
-            }
-            return (
-              <FormControlLabel
-                className={classes.checkboxLabel}
-                label={getDay(i)}
-                key={i}
-                control={
-                  <CustomCheckbox
-                    onChange={handleDayChange}
-                    checked={checked}
-                    value={i}
-                    color="primary"
-                    inputProps={{
-                      "aria-label": "primary checkbox"
-                    }}
-                  />
-                }
-              />
-            );
-          })}
-        </FormControl>
-        <hr className={classes.divisor} />
-      </Collapse>
-    </div>
-  );
-});
-
-const AreYouSure = withStyles(styles)(function(props) {
-  const { name, classes, confirmDelete, collapsed, handleDeleteChoice } = props;
-  return (
-    <Collapse in={confirmDelete && collapsed}>
-      <Typography component="p" className={`${classes.areYouSure}`}>
-        {`Are you sure you want to delete the workout ${name}, this action can't be undone.`}
-      </Typography>
-      <div className={`${classes.buttonContainer}`}>
-        <LeftButton
-          className={`${classes.button}`}
-          onClick={() => {
-            handleDeleteChoice(false);
-          }}
-        >
-          cancel
-        </LeftButton>
-        <RightButton
-          className={`${classes.button}`}
-          onClick={() => {
-            handleDeleteChoice(true);
-          }}
-        >
-          delete
-        </RightButton>
-      </div>
-    </Collapse>
-  );
-});
-
-const Exercise = withStyles(styles)(function(props) {
-  const { classes, index, id, name, onRemoveExerciseClick, collapsed } = props;
-  return (
-    <div className={`${classes.exercise} ${classes[`col${(index - 1) % 2}`]}`} component="li">
-      <Typography component="p" className={`${classes.index}`}>
-        {index}.
-      </Typography>
-      <Typography component="p" className={`${classes.exerciseName}`}>
-        {name}
-      </Typography>
-      {collapsed && (
-        <IconButton
-          disableRipple
-          size="small"
-          className={`${classes.button} ${classes.addRemoveButton}`}
-          onClick={() => {
-            onRemoveExerciseClick(id);
-          }}
-        >
-          <Remove />
-        </IconButton>
-      )}
-    </div>
-  );
-});
 
 class WorkoutModal extends React.Component {
   constructor(props) {
@@ -160,7 +65,7 @@ class WorkoutModal extends React.Component {
   restoreAndClose() {
     const { handleClose, workout } = this.props;
     const { name, note, exercises, days } = workout;
-    this.setState({ name, note, exercises: clone(exercises), days: clone(days), collapsed: false, error: "", change: false,confirmDelete: false });
+    this.setState({ name, note, exercises: clone(exercises), days: clone(days), collapsed: false, error: "", change: false, confirmDelete: false });
     handleClose();
   }
 
@@ -199,9 +104,9 @@ class WorkoutModal extends React.Component {
       <CustomDialog
         open={open}
         onKeyPress={e => {
-          if (e.key === "Enter") {
-            this.updateAndClose();
-          }
+          // if (e.key === "Enter") {
+          //   this.updateAndClose();
+          // }
         }}
       >
         <ClickAwayListener onClickAway={this.restoreAndClose}>
@@ -259,10 +164,10 @@ class WorkoutModal extends React.Component {
             <Collapse in={collapsed && !confirmDelete}>
               <hr className={`${classes.divisor} ${classes.topDivisor}`} />
               <div className={`${classes.buttonContainer}`}>
-                <LeftButton className={`${classes.button}`} onClick={() => {}}>
+                <LeftButton className={`${classes.button}`} onClick={() => {}} disableRipple>
                   add an exercise
                 </LeftButton>
-                <RightButton className={`${classes.button}`} onClick={this.handleDeleteWorkout}>
+                <RightButton className={`${classes.button}`} onClick={this.handleDeleteWorkout} disableRipple>
                   delete workout
                 </RightButton>
               </div>
@@ -272,13 +177,13 @@ class WorkoutModal extends React.Component {
 
             <Collapse in={!confirmDelete}>
               <div className={`${classes.buttonContainer}`}>
-                <LeftButton className={`${classes.button}`} onClick={this.updateAndClose} disabled={!change}>
+                <LeftButton className={`${classes.button}`} onClick={this.updateAndClose} disabled={!change} disableRipple>
                   update
                 </LeftButton>
                 <IconButton disableRipple size="small" className={`${classes.button}`} onClick={this.handleCollapseButton}>
                   {collapsed ? <ExpandLess /> : <ExpandMore />}
                 </IconButton>
-                <RightButton className={`${classes.button}`} onClick={this.restoreAndClose}>
+                <RightButton className={`${classes.button}`} onClick={this.restoreAndClose} disableRipple>
                   close
                 </RightButton>
               </div>

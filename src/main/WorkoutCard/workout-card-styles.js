@@ -43,7 +43,11 @@ const styles = theme => {
       padding: "0px",
       minWidth: "0px",
       "&:hover": {
-        backgroundColor: "transparent"
+        backgroundColor: "transparent",
+        color: darken(theme.palette.primary.main, 0.1)
+      },
+      "&:focus": {
+        color: darken(theme.palette.primary.main, 0.1)
       }
     },
     footerDone: {

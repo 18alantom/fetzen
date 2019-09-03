@@ -165,9 +165,9 @@ class ExerciseModal extends React.Component {
       <CustomDialog
         open={open}
         onKeyPress={e => {
-          if (e.key === "Enter") {
-            this.updateAndClose();
-          }
+          // if (e.key === "Enter") {
+          //   this.updateAndClose();
+          // }
         }}
       >
         <ClickAwayListener onClickAway={this.restoreAndClose}>
@@ -224,13 +224,13 @@ class ExerciseModal extends React.Component {
             </Collapse>
 
             <div className={`${classes.buttonContainer}`}>
-              <LeftButton className={`${classes.button}`} onClick={this.updateAndClose} disabled={!change}>
+              <LeftButton className={`${classes.button}`} onClick={this.updateAndClose} disabled={!change} disableRipple>
                 update
               </LeftButton>
               <IconButton disableRipple size="small" className={`${classes.button}`} onClick={this.handleCollapseButton}>
                 {collapsed ? <ExpandLess /> : <ExpandMore />}
               </IconButton>
-              <RightButton style={{ textAlign: "left" }} className={`${classes.button}`} onClick={this.restoreAndClose}>
+              <RightButton style={{ textAlign: "left" }} className={`${classes.button}`} onClick={this.restoreAndClose} disableRipple>
                 close
               </RightButton>
             </div>

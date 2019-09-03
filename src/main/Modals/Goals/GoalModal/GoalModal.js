@@ -32,10 +32,10 @@ class GoalModal extends React.Component {
               <Typography className={`${classes.deadline}`}>{goal[goalKeys.deadline].toDateString()}</Typography>
             )}
             <div className={`${classes.buttonContainer}`}>
-              <LeftButton className={`${classes.button}`} onClick={handleNotDone}>
+              <LeftButton className={`${classes.button}`} onClick={handleNotDone} disableRipple>
                 not done
               </LeftButton>
-              <RightButton className={`${classes.button}`} onClick={handleDone}>
+              <RightButton className={`${classes.button}`} onClick={handleDone} disableRipple>
                 done
               </RightButton>
             </div>

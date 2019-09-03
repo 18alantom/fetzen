@@ -64,7 +64,11 @@ const styles = theme => {
         color: theme.palette.secondary.main
       },
       "&:hover": {
-        backgroundColor: "transparent"
+        backgroundColor: "transparent",
+        color: darken(theme.palette.primary.main, 0.1)
+      },
+      "&:focus": {
+        color: darken(theme.palette.primary.main, 0.1)
       }
     },
     error: {

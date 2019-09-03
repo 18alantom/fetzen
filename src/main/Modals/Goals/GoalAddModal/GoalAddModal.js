@@ -19,10 +19,17 @@ class GoalAddModal extends React.Component {
     };
     this.inputChangeHandler = this.inputChangeHandler.bind(this);
     this.addGoalHandler = this.addGoalHandler.bind(this);
+    this.closeHandler = this.closeHandler.bind(this);
   }
 
   inputChangeHandler({ target: { name, value } }) {
-    this.setState({ [name]: value });
+    this.setState({ [name]: value, error: false });
+  }
+
+  closeHandler() {
+    const e = "";
+    this.setState({ error: false, notEntered: e, title: e, detail: e, deadline: e });
+    this.props.handleClose();
   }
 
   addGoalHandler() {
@@ -76,10 +83,10 @@ class GoalAddModal extends React.Component {
               </Typography>
             </Collapse>
             <div className={`${classes.buttonContainer}`}>
-              <LeftButton className={`${classes.button}`} onClick={this.addGoalHandler}>
+              <LeftButton className={`${classes.button}`} onClick={this.addGoalHandler} disableRipple>
                 add
               </LeftButton>
-              <RightButton className={`${classes.button}`} onClick={handleClose}>
+              <RightButton className={`${classes.button}`} onClick={this.closeHandler} disableRipple>
                 close
               </RightButton>
             </div>
