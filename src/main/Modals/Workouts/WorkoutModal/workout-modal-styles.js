@@ -92,6 +92,13 @@ const styles = theme => {
       borderColor: fade(darken(theme.palette.primary.light, 0.4), 0.4),
       marginTop: "12px"
     },
+    areYouSure: {
+      color: theme.palette.primary.main,
+      fontSize: "1rem",
+      minWidth: "10%",
+      maxWidth: "80%",
+      margin: "auto"
+    },
     topDivisor: {
       marginTop: "8px",
       marginBottom: "16px"
