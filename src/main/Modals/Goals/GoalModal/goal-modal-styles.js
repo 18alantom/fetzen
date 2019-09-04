@@ -25,8 +25,8 @@ const styles = theme => {
     },
     buttonContainer: {
       marginTop: "16px",
-      display: "flex",
-      justifyContent: "space-between"
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr 1fr"
     },
     button: {
       padding: "0px",

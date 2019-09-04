@@ -9,7 +9,7 @@ import styles from "./main-styles";
 import WorkoutModal from "../Modals/Workouts/WorkoutModal/WorkoutModal";
 import WorkoutAddModal from "../Modals/Workouts/WorkoutAddModal/WorkoutAddModal";
 import { lighten } from "@material-ui/core/styles/colorManipulator";
-import { userKeys, workoutKeys, exerciseKeys } from "../../helpers/constants";
+import { userKeys, workoutKeys, exerciseKeys, goalKeys } from "../../helpers/constants";
 import userData from "../dummy-data";
 
 export const CustomSnackbar = withStyles(theme => ({
@@ -38,12 +38,18 @@ class Main extends React.Component {
     this.handleWorkoutAddModalToggle = this.handleWorkoutAddModalToggle.bind(this);
     this.handleWorkoutModalClose = this.handleWorkoutModalClose.bind(this);
     this.handleDeleteWorkoutConfirm = this.handleDeleteWorkoutConfirm.bind(this);
+    this.handleWorkoutAdd = this.handleWorkoutAdd.bind(this);
     this.handleWorkoutUpdate = this.handleWorkoutUpdate.bind(this);
     this.handleExerciseUpdate = this.handleExerciseUpdate.bind(this);
     this.handleGoalUpdate = this.handleGoalUpdate.bind(this);
     this.handleGoalAdd = this.handleGoalAdd.bind(this);
+    this.handleGoalDelete = this.handleGoalDelete.bind(this);
     this.handleDoneClick = this.handleDoneClick.bind(this);
     this.toggleSnackBar = this.toggleSnackBar.bind(this);
+  }
+
+  toggleSnackBar() {
+    this.setState(({ showDoneMessage }) => ({ showDoneMessage: !showDoneMessage }));
   }
 
   handleWorkoutModalOpen(i) {
@@ -54,28 +60,64 @@ class Main extends React.Component {
     this.setState(({ workoutModalOpen }) => ({ workoutModalOpen: !workoutModalOpen }));
   }
 
+  handleWorkoutAddModalToggle() {
+    this.setState(({ workoutAddModalOpen }) => ({ workoutAddModalOpen: !workoutAddModalOpen }));
+  }
+
+  handleGoalAdd(goal) {
+    this.setState(({ data }) => {
+      data.goals.push(goal);
+      return { data, doneMessage: `Set goal '${goal[goalKeys.title]}'` };
+    });
+    this.toggleSnackBar();
+  }
+
+  handleGoalDelete(id) {
+    this.setState(({ data }) => {
+      let goalToRemove = data.goals.filter(g => g.id === id)[0];
+      let goals = data.goals.filter(g => g.id !== id);
+      data[userKeys.goals] = goals;
+      return { data, doneMessage: `Removed goal '${goalToRemove[goalKeys.title]}'` };
+    });
+    this.toggleSnackBar();
+  }
+
   handleGoalUpdate(id, done) {
     this.setState(({ data }) => {
+      let doneMessage = "";
       let goal = data.goals.filter(g => g.id === id)[0];
       if (done) {
-        goal.complete = true;
-        goal.dateCompleted = new Date();
+        goal[goalKeys.complete] = true;
+        goal[goalKeys.dateCompleted] = new Date();
+        doneMessage = `Accomplished goal '${goal[goalKeys.title]}.'`;
       } else if (!done) {
-        goal.complete = false;
-        goal.dateCompleted = undefined;
+        goal[goalKeys.complete] = false;
+        goal[goalKeys.dateCompleted] = undefined;
+        doneMessage = `Reset goal '${goal[goalKeys.title]}.'`;
       } else {
         return;
       }
-      return { data };
+      return { data, doneMessage };
     });
+    this.toggleSnackBar();
+  }
+
+  handleWorkoutAdd(workout) {
+    this.setState(({ data }) => {
+      data[userKeys.workouts].push(workout);
+      return { data, doneMessage: `Added workout '${workout[workoutKeys.name]}.'` };
+    });
+    this.toggleSnackBar();
   }
 
   handleDeleteWorkoutConfirm(id) {
     this.setState(({ data }) => {
       const { workouts } = data;
+      const { name } = workouts.filter(w => w.id === id)[0];
       data.workouts = workouts.filter(w => w.id !== id);
-      return { data, openModal: 0 };
+      return { data, openModal: 0, doneMessage: `Deleted workout '${name}.'` };
     });
+    this.toggleSnackBar();
   }
 
   handleWorkoutUpdate(wid, name, note, exercises, days) {
@@ -88,8 +130,23 @@ class Main extends React.Component {
           w[workoutKeys.days] = days;
         }
       });
-      return { data };
+      return { data, doneMessage: `Updated workout '${name}.'` };
     });
+    this.toggleSnackBar();
+  }
+
+  handleExerciseUpdate(wid, eid, sets, note, name) {
+    this.setState(({ data }) => {
+      // Objects are passed by reference
+      // that is why this works.
+      const workout = data[userKeys.workouts].filter(w => w.id === wid)[0];
+      const exercise = workout[workoutKeys.exercises].filter(e => e.id === eid)[0];
+      exercise[exerciseKeys.sets] = sets;
+      exercise[exerciseKeys.note] = note;
+      exercise[exerciseKeys.name] = name;
+      return { data, doneMessage: `Updated exercise '${name}'.` };
+    });
+    this.toggleSnackBar()
   }
 
   handleDoneClick(wid) {
@@ -102,43 +159,15 @@ class Main extends React.Component {
           last = w[workoutKeys.last];
         }
       });
-      return { data, doneMessage: `Completed ${name} on ${last.toDateString()}.`.trim(), showDoneMessage: true };
+      return { data, doneMessage: `Completed ${name} on ${last.toDateString()}.` };
     });
-  }
-
-  toggleSnackBar() {
-    this.setState(({ showDoneMessage }) => ({ showDoneMessage: !showDoneMessage }));
-  }
-
-  handleGoalAdd(goal) {
-    this.setState(({ data }) => {
-      data.goals.push(goal);
-      return { data };
-    });
-  }
-
-  handleWorkoutAddModalToggle() {
-    this.setState(({ workoutAddModalOpen }) => ({ workoutAddModalOpen: !workoutAddModalOpen }));
-  }
-
-  handleExerciseUpdate(wid, eid, sets, note, name) {
-    this.setState(({ data }) => {
-      // Objects are passed by reference
-      // that is why this works.
-      const workout = data[userKeys.workouts].filter(w => w.id === wid)[0];
-      const exercise = workout[workoutKeys.exercises].filter(e => e.id === eid)[0];
-      exercise[exerciseKeys.sets] = sets;
-      exercise[exerciseKeys.note] = note;
-      exercise[exerciseKeys.name] = name;
-      return data;
-    });
+    this.toggleSnackBar();
   }
 
   render() {
     const { classes } = this.props;
     const { workoutModalOpen, openModal, showDoneMessage, doneMessage, doneMessageDuration, workoutAddModalOpen } = this.state;
     const { goals, workouts } = this.state.data;
-    console.log(workoutAddModalOpen);
     return (
       <div className={classes.mainContainer}>
         <Navbar />
@@ -147,6 +176,7 @@ class Main extends React.Component {
           goals={goals}
           handleWorkoutAddModalToggle={this.handleWorkoutAddModalToggle}
           handleWorkoutModalOpen={this.handleWorkoutModalOpen}
+          handleGoalDelete={this.handleGoalDelete}
           handleGoalUpdate={this.handleGoalUpdate}
           handleGoalAdd={this.handleGoalAdd}
         />
@@ -184,7 +214,7 @@ class Main extends React.Component {
             handleClose={this.handleWorkoutModalClose}
           />
         )}
-        <WorkoutAddModal open={workoutAddModalOpen} handleWorkoutAddModalToggle={this.handleWorkoutAddModalToggle} />
+        <WorkoutAddModal open={workoutAddModalOpen} handleWorkoutAddModalToggle={this.handleWorkoutAddModalToggle} handleWorkoutAdd={this.handleWorkoutAdd} />
       </div>
     );
   }

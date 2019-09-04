@@ -9,22 +9,16 @@ const styles = theme => {
       minWidth: "400px"
     },
     title: {
-      // textTransform: "uppercase",
-      // fontSize: "0.8rem",
-      // fontWeight: "300",
-      // letterSpacing: "4px",
-      // color: theme.palette.primary.main
       color: darken(theme.palette.primary.main, 0.3),
       fontSize: "1.1rem",
       letterSpacing: "1px",
-      marginBottom: "8px"
     },
     form: {
       display: "flex",
       flexDirection: "column"
     },
     input: {
-      marginTop: "24px",
+      marginTop: "16px",
       color: theme.palette.primary.main
     },
     error: {

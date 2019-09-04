@@ -14,25 +14,11 @@ const styles = theme => {
       justifyContent: "space-between",
       marginBottom: "8px"
     },
-    lastCompleted: {
+    exerciseCount: {
       color: darken(theme.palette.primary.main, 0.2),
       marginTop: "4px",
       fontSize: "1rem",
       letterSpacing: "2px"
-    },
-    exercise: {
-      display: "flex",
-      padding: "4px 0px"
-    },
-    exerciseName: {
-      textAlign: "start",
-      color: theme.palette.primary.main
-    },
-    col0: {
-      gridColumn: "1 / span 1"
-    },
-    col1: {
-      gridColumn: "2 / span 1"
     },
     workoutContainer: {
       marginTop: "8px",
@@ -40,15 +26,7 @@ const styles = theme => {
       gridTemplateColumns: "repeat(2,1fr)",
       gridColumnGap: "16px"
     },
-    index: {
-      marginRight: "8px",
-      color: darken(theme.palette.primary.main, 0.3)
-    },
     title: {
-      padding: "0px"
-    },
-    exerciseAddTitle: {
-      width: "300px",
       padding: "0px"
     },
     setsCount: {
@@ -56,33 +34,20 @@ const styles = theme => {
       fontSize: "1.2rem",
       marginTop: "4px"
     },
-    checkboxLabel: {
-      color: darken(theme.palette.primary.main, 0.3)
-    },
-    daysContainer: {
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "flex-start"
-    },
-    checkboxContainer: {
-      display: "flex",
-      flexDirection: "row"
-    },
-    days: {
-      color: darken(theme.palette.primary.main, 0.2),
-      textAlign: "start",
-      letterSpacing: "1px",
-      fontSize: "0.9rem"
-    },
     buttonContainer: {
-      marginTop: "8px",
+      marginTop: "14px",
       display: "flex",
       justifyContent: "space-between"
     },
-    addRemoveButton: {
-      marginLeft: "auto",
-      height: "24px",
-      width: "24px"
+    buttonContainerThree: {
+      marginTop: "14px",
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr 1fr"
+    },
+    message: {
+      color: darken(theme.palette.primary.main, 0.3),
+      textAlign: "center",
+      fontSize: "0.9rem"
     },
     note: {
       margin: "12px 0px 8px 0px"
@@ -102,8 +67,7 @@ const styles = theme => {
       }
     },
     divisor: {
-      borderColor: fade(darken(theme.palette.primary.light, 0.4), 0.4),
-      marginTop: "12px"
+      borderColor: fade(darken(theme.palette.primary.light, 0.4), 0.4)
     },
     topDivisor: {
       marginTop: "8px",

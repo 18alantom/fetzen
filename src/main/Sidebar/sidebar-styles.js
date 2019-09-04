@@ -6,7 +6,7 @@ const styles = theme => {
       gridArea: "sidebar"
     },
     allListContainer: {
-      marginTop: "72px"
+      marginTop: "64px"
     }
   };
 };

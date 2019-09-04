@@ -109,7 +109,7 @@ export const AddExercise = withStyles(styles)(
       const { open, classes } = this.props;
       const { error, name, sets, note, newSet, units } = this.state;
       const { length } = sets;
-      if (open) {
+      if (open && name.trim() === "") {
         // Focus on the exercise title input.
         setTimeout(() => this.exerciseNameRef.current.getElementsByTagName("input")[0].focus(), 300);
       }

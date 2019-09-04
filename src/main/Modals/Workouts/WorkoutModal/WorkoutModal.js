@@ -49,7 +49,7 @@ class WorkoutModal extends React.Component {
     this.setState(({ exercises }) => {
       let notToRemove = exercises.filter(ex => ex.id !== id);
       if (exercises.length > 1) {
-        return { exercises: notToRemove };
+        return { exercises: notToRemove, change: true };
       } else {
         return { error: "atleast one exercise is required" };
       }
@@ -166,9 +166,11 @@ class WorkoutModal extends React.Component {
                 disabled={!collapsed && !(addExercise || confirmDelete)}
                 onChange={this.handleNameChange}
               />
-              <Typography component="h3" className={`${classes.lastCompleted}`}>
-                {workout[workoutKeys.last].toDateString()}
-              </Typography>
+              {workout[workoutKeys.last] && (
+                <Typography component="h3" className={`${classes.lastCompleted}`}>
+                  {workout[workoutKeys.last].toDateString()}
+                </Typography>
+              )}
             </div>
 
             <Collapse in={!confirmDelete && !addExercise}>
@@ -200,10 +202,6 @@ class WorkoutModal extends React.Component {
                 ))}
               </div>
             </Collapse>
-
-            {/* <Collapse in={collapsed && (!confirmDelete && !addExercise)}>
-              <hr className={classes.divisor} />
-            </Collapse> */}
 
             <Collapse in={(collapsed || note !== "") && !confirmDelete && !addExercise}>
               <CustomTextField2
