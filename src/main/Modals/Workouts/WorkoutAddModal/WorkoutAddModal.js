@@ -127,6 +127,10 @@ class WorkoutAddModal extends React.Component {
     const { name, exercises, note, days } = workout;
     let daysString = days.map((d, i) => getDay(d)).join(" ");
     daysString = daysString === "" ? " " : daysString;
+    if (open && name.trim() === "") {
+      // Focus on the workout title input.
+      setTimeout(() => this.workoutNameRef.current.getElementsByTagName("input")[0].focus(), 300);
+    }
     return (
       <CustomDialog
         open={open}
