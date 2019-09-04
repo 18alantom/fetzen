@@ -118,7 +118,12 @@ export const AddExercise = withStyles(styles)(
           <Typography component="h2" className={`${classes.subTitle}`}>
             Add Exercise
           </Typography>
-
+          <Collapse in={error !== ""}>
+            <Typography component="p" className={`${classes.error}`} color="error">
+              {error}
+            </Typography>
+          </Collapse>
+          <hr className={classes.divisor} />
           <div className={`${classes.header}`}>
             <CustomTextField4
               className={`${classes.exerciseAddTitle}`}
@@ -131,11 +136,6 @@ export const AddExercise = withStyles(styles)(
               {length} sets
             </Typography>
           </div>
-          <Collapse in={error !== ""}>
-            <Typography component="p" className={`${classes.error}`} color="error">
-              {error}
-            </Typography>
-          </Collapse>
 
           <div className={`${classes.setsContainer}`}>
             {sets.map((set, i) => (
@@ -171,6 +171,7 @@ export const AddExercise = withStyles(styles)(
             fullWidth
             className={`${classes.note}`}
           />
+          <hr className={classes.divisor} />
 
           <div className={`${classes.buttonContainer}`}>
             <LeftButton className={`${classes.button}`} onClick={this.handleCancel} disableRipple>

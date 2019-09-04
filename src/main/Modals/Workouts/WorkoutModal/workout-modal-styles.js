@@ -53,7 +53,8 @@ const styles = theme => {
     },
     setsCount: {
       color: darken(theme.palette.primary.main, 0.2),
-      fontSize: "1.2rem"
+      fontSize: "1.2rem",
+      marginTop: "4px"
     },
     checkboxLabel: {
       color: darken(theme.palette.primary.main, 0.3)
@@ -65,13 +66,15 @@ const styles = theme => {
     },
     checkboxContainer: {
       display: "flex",
-      flexDirection: "row"
+      flexDirection: "row",
+      justifyContent: "space-between"
     },
     days: {
       color: darken(theme.palette.primary.main, 0.2),
       textAlign: "start",
       letterSpacing: "1px",
-      fontSize: "0.9rem"
+      fontSize: "0.9rem",
+      height: "21px"
     },
     buttonContainer: {
       marginTop: "14px",
@@ -114,7 +117,8 @@ const styles = theme => {
       fontSize: "1rem",
       minWidth: "10%",
       maxWidth: "80%",
-      margin: "auto"
+      margin: "auto",
+      marginTop: "8px"
     },
     topDivisor: {
       marginTop: "8px",

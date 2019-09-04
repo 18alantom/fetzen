@@ -41,7 +41,7 @@ export const Days = withStyles(styles)(function(props) {
             );
           })}
         </FormControl>
-        <hr className={classes.divisor} />
+        {/* <hr className={classes.divisor} /> */}
       </Collapse>
     </div>
   );
@@ -54,9 +54,11 @@ export const AreYouSure = withStyles(styles)(function(props) {
       <Typography component="h2" className={`${classes.subTitle}`}>
         Delete Workout
       </Typography>
+      <hr className={classes.divisor} />
       <Typography component="p" className={`${classes.areYouSure}`}>
         {`Are you sure you want to delete the workout '${name}', this action can't be undone.`}
       </Typography>
+      <hr className={classes.divisor} />
       <div className={`${classes.buttonContainer}`}>
         <LeftButton
           className={`${classes.button}`}

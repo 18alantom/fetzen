@@ -16,7 +16,8 @@ const styles = theme => {
     },
     setsCount: {
       color: darken(theme.palette.primary.main, 0.2),
-      fontSize: "1.2rem"
+      fontSize: "1.2rem",
+      marginTop: "4px"
     },
     setContainer: {
       display: "flex",

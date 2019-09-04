@@ -7,6 +7,7 @@ import { Snackbar, Typography } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 import styles from "./main-styles";
 import WorkoutModal from "../Modals/Workouts/WorkoutModal/WorkoutModal";
+import WorkoutAddModal from "../Modals/Workouts/WorkoutAddModal/WorkoutAddModal";
 import { lighten } from "@material-ui/core/styles/colorManipulator";
 import { userKeys, workoutKeys, exerciseKeys } from "../../helpers/constants";
 import userData from "../dummy-data";
@@ -26,6 +27,7 @@ class Main extends React.Component {
     super(props);
     this.state = {
       workoutModalOpen: false,
+      workoutAddModalOpen: false,
       openModal: 0,
       data: userData,
       showDoneMessage: false,
@@ -33,6 +35,7 @@ class Main extends React.Component {
       doneMessageDuration: 3000
     };
     this.handleWorkoutModalOpen = this.handleWorkoutModalOpen.bind(this);
+    this.handleWorkoutAddModalToggle = this.handleWorkoutAddModalToggle.bind(this);
     this.handleWorkoutModalClose = this.handleWorkoutModalClose.bind(this);
     this.handleDeleteWorkoutConfirm = this.handleDeleteWorkoutConfirm.bind(this);
     this.handleWorkoutUpdate = this.handleWorkoutUpdate.bind(this);
@@ -114,6 +117,10 @@ class Main extends React.Component {
     });
   }
 
+  handleWorkoutAddModalToggle() {
+    this.setState(({ workoutAddModalOpen }) => ({ workoutAddModalOpen: !workoutAddModalOpen }));
+  }
+
   handleExerciseUpdate(wid, eid, sets, note, name) {
     this.setState(({ data }) => {
       // Objects are passed by reference
@@ -129,14 +136,16 @@ class Main extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { workoutModalOpen, openModal, showDoneMessage, doneMessage, doneMessageDuration } = this.state;
+    const { workoutModalOpen, openModal, showDoneMessage, doneMessage, doneMessageDuration, workoutAddModalOpen } = this.state;
     const { goals, workouts } = this.state.data;
+    console.log(workoutAddModalOpen);
     return (
       <div className={classes.mainContainer}>
         <Navbar />
         <Sidebar
           workouts={workouts}
           goals={goals}
+          handleWorkoutAddModalToggle={this.handleWorkoutAddModalToggle}
           handleWorkoutModalOpen={this.handleWorkoutModalOpen}
           handleGoalUpdate={this.handleGoalUpdate}
           handleGoalAdd={this.handleGoalAdd}
@@ -175,6 +184,7 @@ class Main extends React.Component {
             handleClose={this.handleWorkoutModalClose}
           />
         )}
+        <WorkoutAddModal open={workoutAddModalOpen} handleWorkoutAddModalToggle={this.handleWorkoutAddModalToggle} />
       </div>
     );
   }

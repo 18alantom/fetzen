@@ -63,7 +63,7 @@ class GoalAddModal extends React.Component {
         <ClickAwayListener onClickAway={handleClose}>
           <div className={`${classes.container}`}>
             <Typography component="h2" className={`${classes.title}`}>
-              add goal
+              Add Goal
             </Typography>
             <div className={`${classes.form}`}>
               <CustomTextField name="title" label="Title" type="text" className={`${classes.input}`} onChange={this.inputChangeHandler} />

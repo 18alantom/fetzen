@@ -1,7 +1,7 @@
 import uuid from "uuid/v1";
 // Classes
 export class User {
-  constructor(name, weight, height, goals, workouts) {
+  constructor(name = "", weight = 0, height = 0, goals = [], workouts = []) {
     this.id = uuid();
     this.name = name;
     this.weight = weight; // in kgs
@@ -12,7 +12,7 @@ export class User {
 }
 
 export class Goal {
-  constructor(title, detail, deadline, complete = false, dateCompleted = undefined) {
+  constructor(title = "", detail = "", deadline = undefined, complete = false, dateCompleted = undefined) {
     this.id = uuid();
     this.title = title;
     this.detail = detail;
@@ -23,7 +23,7 @@ export class Goal {
 }
 
 export class Workout {
-  constructor(name, days, exercises, last, note = "") {
+  constructor(name = "", days = [], exercises = [], last = undefined, note = "") {
     this.id = uuid();
     this.name = name;
     this.days = days;
@@ -35,7 +35,7 @@ export class Workout {
 
 // units can be kg, lbs, knph, mph.
 export class Exercise {
-  constructor(name, sets, units = "kg", note = "") {
+  constructor(name = "", sets = [], units = "kg", note = "") {
     this.id = uuid();
     this.name = name;
     this.sets = sets;
@@ -46,7 +46,7 @@ export class Exercise {
 
 // Sets is an exisiting class name
 export class Cycle {
-  constructor(intensity, reps, rest) {
+  constructor(intensity = 0, reps = 0, rest = 0) {
     this.id = uuid();
     this.intensity = intensity;
     this.reps = reps;

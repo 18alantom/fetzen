@@ -179,6 +179,9 @@ class WorkoutModal extends React.Component {
               </Collapse>
 
               <Collapse in={collapsed}>
+                <Typography component="h2" className={`${classes.subTitle}`}>
+                  Edit Workout
+                </Typography>
                 <hr className={`${classes.divisor} ${classes.topDivisor}`} />
               </Collapse>
 
@@ -198,9 +201,9 @@ class WorkoutModal extends React.Component {
               </div>
             </Collapse>
 
-            <Collapse in={collapsed && (!confirmDelete && !addExercise)}>
+            {/* <Collapse in={collapsed && (!confirmDelete && !addExercise)}>
               <hr className={classes.divisor} />
-            </Collapse>
+            </Collapse> */}
 
             <Collapse in={(collapsed || note !== "") && !confirmDelete && !addExercise}>
               <CustomTextField2

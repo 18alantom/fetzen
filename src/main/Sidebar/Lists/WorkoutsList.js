@@ -16,7 +16,7 @@ class WorkoutList extends React.Component {
     this.setState(({ expand }) => ({ expand: !expand }));
   }
   render() {
-    const { classes, workouts, handleWorkoutModalOpen } = this.props;
+    const { classes, workouts, handleWorkoutModalOpen, handleWorkoutAddModalToggle } = this.props;
     const { expand } = this.state;
     return (
       <div>
@@ -49,7 +49,7 @@ class WorkoutList extends React.Component {
             })}
           </List>
           <div className={classes.addButtonContainer}>
-            <IconButton className={classes.addButton} iaria-label="add-workout" size="small">
+            <IconButton className={classes.addButton} iaria-label="add-workout" size="small" onClick={handleWorkoutAddModalToggle}>
               <Add />
             </IconButton>
           </div>
