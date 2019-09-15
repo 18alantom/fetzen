@@ -222,15 +222,15 @@ class Main extends React.Component {
     this.sendData(ep.workouts.add, doneMessage, getWorkoutAddJson({ ...workout, uid: this.state.data.id }), "POST");
   }
 
-  handleDeleteWorkoutConfirm(id) {
+  handleDeleteWorkoutConfirm(id, name) {
+    const doneMessage = `Deleted workout '${name}'`;
     this.setState(({ data }) => {
       const { workouts } = data;
-      const { name } = workouts.filter(w => w.id === id)[0];
       data.workouts = workouts.filter(w => w.id !== id);
       data.workouts.forEach((w, i) => (w.seq = i));
-      return { data, openModal: 0, doneMessage: `Deleted workout '${name}'` };
+      return { data, openModal: 0 };
     });
-    this.toggleSnackBar();
+    this.sendData(ep.workouts.delete, doneMessage, getWorkoutDelete(id), "DELETE");
   }
 
   handleWorkoutUpdate(wid, name, note, exercises, days, exercisesRemoved, seq, id) {
@@ -265,18 +265,18 @@ class Main extends React.Component {
   }
 
   handleDoneClick(wid) {
+    const workout = this.state.data[userKeys.workouts].filter(w => w.id === wid)[0];
+    const last = new Date();
+    const doneMessage = `Completed ${workout.name} on ${last.toDateString()}.`;
     this.setState(({ data }) => {
-      let name, last;
       data.workouts.forEach(w => {
         if (w.id === wid) {
-          w[workoutKeys.last] = new Date();
-          name = w[workoutKeys.name];
-          last = w[workoutKeys.last];
+          w[workoutKeys.last] = last;
         }
       });
-      return { data, doneMessage: `Completed ${name} on ${last.toDateString()}.` };
+      return { data };
     });
-    this.toggleSnackBar();
+    this.sendData(ep.workouts.done, doneMessage, getWorkoutDone({ ...workout, last }), "PUT");
   }
 
   render() {

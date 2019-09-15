@@ -75,7 +75,7 @@ class WorkoutModal extends React.Component {
       this.workoutNameRef.current.getElementsByTagName("input")[0].focus();
       return;
     } else {
-      handleWorkoutUpdate(wid, name, note, exercises, days, exercisesRemoved, workout.seq,workout.id);
+      handleWorkoutUpdate(wid, name, note, exercises, days, exercisesRemoved, workout.seq, workout.id);
       // handleWorkoutUpdate(wid, name, note, exercises, days, exercisesRemoved, workout.seq);
       this.setState({
         collapsed: false,
@@ -128,7 +128,7 @@ class WorkoutModal extends React.Component {
   handleDeleteChoice(choice) {
     this.setState({ confirmDelete: false });
     if (choice) {
-      this.props.handleDeleteWorkoutConfirm(this.props.wid);
+      this.props.handleDeleteWorkoutConfirm(this.props.wid, this.state.name);
       this.props.handleClose();
     }
   }
