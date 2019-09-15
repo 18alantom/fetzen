@@ -20,6 +20,7 @@ class WorkoutModal extends React.Component {
       name: this.props.workout[workoutKeys.name],
       note: this.props.workout[workoutKeys.note],
       exercises: clone(this.props.workout[workoutKeys.exercises]),
+      exercisesRemoved: [],
       days: clone(this.props.workout[workoutKeys.days]),
       change: false,
       confirmDelete: false,
@@ -46,11 +47,12 @@ class WorkoutModal extends React.Component {
   }
 
   handleRemoveExercise(id) {
-    this.setState(({ exercises }) => {
+    this.setState(({ exercises, exercisesRemoved }) => {
       let notToRemove = exercises.filter(ex => ex.id !== id);
       if (exercises.length > 1) {
+        exercisesRemoved.push(exercises.filter(ex => ex.id === id)[0].id);
         exercises.forEach((e, i) => (e.seq = i));
-        return { exercises: notToRemove, change: true };
+        return { exercises: notToRemove, change: true, exercisesRemoved };
       } else {
         return { error: "atleast one exercise is required" };
       }
@@ -67,13 +69,14 @@ class WorkoutModal extends React.Component {
 
   updateAndClose() {
     const { handleClose, wid, handleWorkoutUpdate, workout } = this.props;
-    const { name, note, exercises, days } = this.state;
+    const { name, note, exercises, days, exercisesRemoved } = this.state;
     if (name === "") {
       this.setState({ collapsed: true, error: "name can't be blank" });
       this.workoutNameRef.current.getElementsByTagName("input")[0].focus();
       return;
     } else {
-      handleWorkoutUpdate(wid, name, note, exercises, days, workout.seq);
+      handleWorkoutUpdate(wid, name, note, exercises, days, exercisesRemoved, workout.seq,workout.id);
+      // handleWorkoutUpdate(wid, name, note, exercises, days, exercisesRemoved, workout.seq);
       this.setState({
         collapsed: false,
         error: "",

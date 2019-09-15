@@ -68,3 +68,53 @@ export const getExerciseJson = ({ wid: w_id, eid: e_id, sets, note: e_note, name
   };
   return JSON.stringify(exercise);
 };
+
+const getExercise = ({ id: e_id, name: e_name, note: e_note, seq: e_seq, sets, units: e_unit }) => {
+  return {
+    e_id,
+    e_name,
+    e_note,
+    e_seq,
+    e_unit,
+    e_cycles: getCycles(sets)
+  };
+};
+
+const getExercises = exercises => {
+  const w_exercises = [];
+  for (let i in exercises) {
+    w_exercises.push(getExercise(exercises[i]));
+  }
+  return w_exercises;
+};
+
+export const getWorkoutAddJson = ({ uid: u_id, id: w_id, days, exercises, name: w_name, note: w_note, seq: w_seq }) => {
+  const workout = {
+    u_id,
+    w_id,
+    w_seq,
+    w_name,
+    w_note,
+    w_days: days.join(","),
+    w_exercises: getExercises(exercises),
+    w_date: new Date().toISOString().split("T")[0]
+  };
+  return JSON.stringify(workout);
+};
+
+export const getWorkoutUpdateJson = ({ id: w_id, name: w_name, seq: w_seq, days, note: w_note, exercises, wED: w_exercises_deleted }) => {
+  const workout = {
+    w_id,
+    w_name,
+    w_seq,
+    w_date: new Date().toISOString().split("T")[0],
+    w_days: days.join(","),
+    w_note,
+    w_exercises: getExercises(exercises),
+    w_exercises_deleted
+  };
+  return JSON.stringify(workout);
+};
+
+export const getWorkoutDone = () => {};
+export const getWorkoutDelete = () => {};

@@ -12,7 +12,9 @@ const getGoals = goals => {
 };
 
 const getWorkouts = workouts => {
+  workouts.sort((v, w) => v.seq - w.seq);
   for (let i in workouts) {
+    workouts[i].exercises.sort((e, f) => e.seq - f.seq);
     const { last } = workouts[i];
     if (last) {
       workouts[i].last = new Date(last);

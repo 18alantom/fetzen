@@ -81,15 +81,17 @@ class WorkoutCard extends React.Component {
             update
           </Button>
         </div>
-        <ExerciseModal
-          open={exerciseModalOpen}
-          exercise={workout[workoutKeys.exercises][openModal]}
-          // Changing key causes component to unmount and nullifies the antipattern
-          // of copying props to state in the ExerciseModal component.
-          key={workout[workoutKeys.exercises][openModal].id}
-          handleClose={this.handleExerciseModalClose}
-          handleExerciseUpdate={this.handleExerciseUpdate}
-        />
+        {Boolean(workout[workoutKeys.exercises][openModal]) && (
+          <ExerciseModal
+            open={exerciseModalOpen}
+            exercise={workout[workoutKeys.exercises][openModal]}
+            // Changing key causes component to unmount and nullifies the antipattern
+            // of copying props to state in the ExerciseModal component.
+            key={workout[workoutKeys.exercises][openModal].id}
+            handleClose={this.handleExerciseModalClose}
+            handleExerciseUpdate={this.handleExerciseUpdate}
+          />
+        )}
       </Card>
     );
   }

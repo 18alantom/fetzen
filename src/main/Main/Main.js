@@ -14,7 +14,16 @@ import { userKeys, workoutKeys, exerciseKeys, goalKeys } from "../../helpers/con
 import { getUser } from "../../helpers/object-getters";
 import { User } from "../../helpers/classes";
 import { getEndPoint as gEP, endpoints as ep } from "../../helpers/endpoints";
-import { getGoalAddJson, getGoalDeleteJson, getGoalUpdateJson, getExerciseJson } from "../../helpers/json-getters";
+import {
+  getGoalAddJson,
+  getGoalDeleteJson,
+  getGoalUpdateJson,
+  getExerciseJson,
+  getWorkoutAddJson,
+  getWorkoutUpdateJson,
+  getWorkoutDelete,
+  getWorkoutDone
+} from "../../helpers/json-getters";
 
 export const CustomSnackbar = withStyles(theme => ({
   root: {
@@ -160,13 +169,12 @@ class Main extends React.Component {
   }
 
   handleGoalAdd(goal) {
-    goal.uid = this.state.data.id;
     const doneMessage = `Set goal '${goal[goalKeys.title]}'`;
     this.setState(({ data }) => {
       data.goals.push(goal);
       return { data };
     });
-    this.sendData(ep.goals.add, doneMessage, getGoalAddJson(goal), "POST");
+    this.sendData(ep.goals.add, doneMessage, getGoalAddJson({ ...goal, uid: this.state.id }), "POST");
   }
 
   handleGoalDelete(id) {
@@ -203,13 +211,15 @@ class Main extends React.Component {
   }
 
   handleWorkoutAdd(workout) {
+    const doneMessage = `Added workout '${workout[workoutKeys.name]}'`;
+    const seq = this.state.data[userKeys.workouts].length;
+    workout.seq = seq;
+
     this.setState(({ data }) => {
-      const seq = data[userKeys.workouts].length;
-      workout.seq = seq;
       data[userKeys.workouts].push(workout);
-      return { data, doneMessage: `Added workout '${workout[workoutKeys.name]}'` };
+      return { data };
     });
-    this.toggleSnackBar();
+    this.sendData(ep.workouts.add, doneMessage, getWorkoutAddJson({ ...workout, uid: this.state.data.id }), "POST");
   }
 
   handleDeleteWorkoutConfirm(id) {
@@ -223,19 +233,19 @@ class Main extends React.Component {
     this.toggleSnackBar();
   }
 
-  handleWorkoutUpdate(wid, name, note, exercises, days, _seq) {
+  handleWorkoutUpdate(wid, name, note, exercises, days, exercisesRemoved, seq, id) {
+    const doneMessage = `Updated workout '${name}.'`;
+    const workout = this.state.data.workouts.filter(w => w.id === wid)[0];
+    workout[workoutKeys.name] = name;
+    workout[workoutKeys.note] = note;
+    workout[workoutKeys.exercises] = exercises;
+    workout[workoutKeys.days] = days;
     this.setState(({ data }) => {
-      data.workouts.forEach(w => {
-        if (w.id === wid) {
-          w[workoutKeys.name] = name;
-          w[workoutKeys.note] = note;
-          w[workoutKeys.exercises] = exercises;
-          w[workoutKeys.days] = days;
-        }
-      });
-      return { data, doneMessage: `Updated workout '${name}.'` };
+      // This may be bad design.
+      return { data };
     });
-    this.toggleSnackBar();
+    // this.sendData(ep.workouts.update, doneMessage, getWorkoutUpdateJson({ ...workout, seq, id, wED: exercisesRemoved }), "PUT");
+    this.sendData(ep.workouts.update, doneMessage, getWorkoutUpdateJson({ ...workout, wED: exercisesRemoved }), "PUT");
   }
 
   handleExerciseUpdate(wid, eid, sets, note, name, seq, units) {
