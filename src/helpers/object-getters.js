@@ -2,7 +2,7 @@ const getGoals = goals => {
   for (let i in goals) {
     const { deadline, complete, dateCompleted } = goals[i];
     goals[i].deadline = new Date(deadline);
-    goals[i].complete = complete === 0 ? false : true;
+    goals[i].complete = complete !== 0;
     if (dateCompleted) {
       goals[i].dateCompleted = new Date(dateCompleted);
     } else {

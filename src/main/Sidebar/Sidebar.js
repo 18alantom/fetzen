@@ -18,7 +18,9 @@ class Sidebar extends React.Component {
           <Divider />
           <GoalsList goals={notCompletedGoals} handleGoalUpdate={handleGoalUpdate} handleGoalAdd={handleGoalAdd} handleGoalDelete={handleGoalDelete} />
           <Divider />
-          {completedGoals.length === 0 ? undefined : true && <GoalsCompletedList goals={completedGoals} handleGoalUpdate={handleGoalUpdate} />}
+          {completedGoals.length === 0
+            ? undefined
+            : true && <GoalsCompletedList goals={completedGoals} handleGoalUpdate={handleGoalUpdate} handleGoalDelete={handleGoalDelete} />}
           {completedGoals.length === 0 ? undefined : true && <Divider />}
         </div>
       </Drawer>

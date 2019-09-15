@@ -12,7 +12,9 @@ import WorkoutAddModal from "../Modals/Workouts/WorkoutAddModal/WorkoutAddModal"
 import { lighten } from "@material-ui/core/styles/colorManipulator";
 import { userKeys, workoutKeys, exerciseKeys, goalKeys } from "../../helpers/constants";
 import { getUser } from "../../helpers/object-getters";
-import userData from "../dummy-data";
+import { User } from "../../helpers/classes";
+import { getEndPoint as gEP, endpoints as ep } from "../../helpers/endpoints";
+import { getGoalAddJson, getGoalDeleteJson, getGoalUpdateJson } from "../../helpers/json-getters";
 
 export const CustomSnackbar = withStyles(theme => ({
   root: {
@@ -31,10 +33,14 @@ class Main extends React.Component {
       workoutModalOpen: false,
       workoutAddModalOpen: false,
       openModal: 0,
-      data: userData,
+      data: new User(),
+      url: "",
+      timerId: 0,
+      alive: true,
       showDoneMessage: false,
       doneMessage: "",
-      doneMessageDuration: 3000
+      doneMessageDuration: 3000,
+      status: {}
     };
     this.handleWorkoutModalOpen = this.handleWorkoutModalOpen.bind(this);
     this.handleWorkoutAddModalToggle = this.handleWorkoutAddModalToggle.bind(this);
@@ -48,12 +54,93 @@ class Main extends React.Component {
     this.handleGoalDelete = this.handleGoalDelete.bind(this);
     this.handleDoneClick = this.handleDoneClick.bind(this);
     this.toggleSnackBar = this.toggleSnackBar.bind(this);
+    this.sendData = this.sendData.bind(this);
   }
 
   componentDidMount() {
-    const { userData, dataLoadedHandler } = this.props;
-    this.setState({ data: getUser(clone(userData)) });
+    const { userData, dataLoadedHandler, url } = this.props;
+    this.setState({
+      data: getUser(clone(userData)),
+      url,
+      timerId: setInterval(() => {
+        fetch(gEP(url, ep.ping))
+          .catch(_err => {
+            this.setState(({ alive }) => {
+              if (alive) {
+                return { alive: !alive, doneMessage: "Network Error: changes may not be saved", showDoneMessage: true };
+              }
+            });
+            return false;
+          })
+          .then(res => {
+            if (res) {
+              this.setState(({ alive }) => {
+                if (!alive) {
+                  return { alive: true, doneMessage: "network issue resolved", showDoneMessage: true };
+                }
+              });
+            }
+          });
+      }, 10000)
+    });
     dataLoadedHandler();
+  }
+
+  componentWillUnmount() {
+    this.setState(({ timerId }) => {
+      clearInterval(timerId);
+      return { data: {} };
+    });
+  }
+
+  sendData(endpoint, doneMessage, body = {}, method = "POST") {
+    const { url, alive } = this.state;
+    const headers = new Headers({ "Content-Type": "application/json" });
+    const init = {
+      method,
+      body,
+      headers
+    };
+    const req = new Request(gEP(url, endpoint), init);
+    if (alive) {
+      fetch(req)
+        .catch(err => {
+          this.setState(({ status }) => {
+            status.ok = false;
+            status.code = 503;
+            status.message = err.message;
+            return { status };
+          });
+          return false;
+        })
+        .then(res => {
+          if (res) {
+            this.setState(({ status }) => {
+              status.ok = res.ok;
+              status.code = res.status;
+              return { status };
+            });
+            return res.json();
+          } else {
+            return "Network Error";
+          }
+        })
+        .then(data => {
+          const { ok } = this.state.status;
+          if (ok) {
+            this.setState({ doneMessage });
+            this.toggleSnackBar();
+          } else {
+            throw new Error(`${data}`);
+          }
+        })
+        .catch(err => {
+          this.setState({ doneMessage: err.message });
+          this.toggleSnackBar();
+        });
+    } else {
+      this.setState({ doneMessage: "Network Error: changes not saved" });
+    }
   }
 
   toggleSnackBar() {
@@ -73,47 +160,52 @@ class Main extends React.Component {
   }
 
   handleGoalAdd(goal) {
+    goal.uid = this.state.data.id;
+    const doneMessage = `Set goal '${goal[goalKeys.title]}'`;
     this.setState(({ data }) => {
       data.goals.push(goal);
-      return { data, doneMessage: `Set goal '${goal[goalKeys.title]}'` };
+      return { data };
     });
-    this.toggleSnackBar();
+    this.sendData(ep.goals.add, doneMessage, getGoalAddJson(goal), "POST");
   }
 
   handleGoalDelete(id) {
+    let { goals } = this.state.data;
+    let goalToRemove = goals.filter(g => g.id === id)[0];
+    goals = goals.filter(g => g.id !== id);
+    const doneMessage = `Removed goal '${goalToRemove[goalKeys.title]}'`;
+
     this.setState(({ data }) => {
-      let goalToRemove = data.goals.filter(g => g.id === id)[0];
-      let goals = data.goals.filter(g => g.id !== id);
       data[userKeys.goals] = goals;
-      return { data, doneMessage: `Removed goal '${goalToRemove[goalKeys.title]}'` };
+      return { data };
     });
-    this.toggleSnackBar();
+
+    this.sendData(ep.goals.delete, doneMessage, getGoalDeleteJson(id), "DELETE");
   }
 
   handleGoalUpdate(id, done) {
+    let { goals } = this.state.data;
+    let doneMessage = "";
+    let goal = goals.filter(g => g.id === id)[0];
+    if (done) {
+      goal[goalKeys.complete] = true;
+      goal[goalKeys.dateCompleted] = new Date();
+      doneMessage = `Accomplished goal '${goal[goalKeys.title]}'`;
+    } else if (!done) {
+      goal[goalKeys.complete] = false;
+      goal[goalKeys.dateCompleted] = undefined;
+      doneMessage = `Reset goal '${goal[goalKeys.title]}'`;
+    }
     this.setState(({ data }) => {
-      let doneMessage = "";
-      let goal = data.goals.filter(g => g.id === id)[0];
-      if (done) {
-        goal[goalKeys.complete] = true;
-        goal[goalKeys.dateCompleted] = new Date();
-        doneMessage = `Accomplished goal '${goal[goalKeys.title]}.'`;
-      } else if (!done) {
-        goal[goalKeys.complete] = false;
-        goal[goalKeys.dateCompleted] = undefined;
-        doneMessage = `Reset goal '${goal[goalKeys.title]}.'`;
-      } else {
-        return;
-      }
-      return { data, doneMessage };
+      return { data };
     });
-    this.toggleSnackBar();
+    this.sendData(ep.goals.update, doneMessage, getGoalUpdateJson(goal), "PUT");
   }
 
   handleWorkoutAdd(workout) {
     this.setState(({ data }) => {
       data[userKeys.workouts].push(workout);
-      return { data, doneMessage: `Added workout '${workout[workoutKeys.name]}.'` };
+      return { data, doneMessage: `Added workout '${workout[workoutKeys.name]}'` };
     });
     this.toggleSnackBar();
   }
@@ -123,7 +215,7 @@ class Main extends React.Component {
       const { workouts } = data;
       const { name } = workouts.filter(w => w.id === id)[0];
       data.workouts = workouts.filter(w => w.id !== id);
-      return { data, openModal: 0, doneMessage: `Deleted workout '${name}.'` };
+      return { data, openModal: 0, doneMessage: `Deleted workout '${name}'` };
     });
     this.toggleSnackBar();
   }

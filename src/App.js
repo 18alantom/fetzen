@@ -14,11 +14,15 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { loggedin: false, registered: false, userData: {}, status: {}, error: "", info: "" };
+    this.state = { loggedin: false, registered: false, userData: {}, status: {}, error: "", info: "", url: "" };
     this.loginHandler = this.loginHandler.bind(this);
     this.dataLoaded = this.dataLoaded.bind(this);
     this.registerHandler = this.registerHandler.bind(this);
     this.dismissRegister = this.dismissRegister.bind(this);
+  }
+
+  componentDidMount() {
+    this.setState({ url: URL });
   }
 
   dismissRegister() {
@@ -36,7 +40,7 @@ class App extends React.Component {
       body: getLoginJson(values),
       headers
     };
-    const req = new Request(gEP(URL, ep.users.login), init);
+    const req = new Request(gEP(this.state.url, ep.users.login), init);
     fetch(req)
       .catch(err => {
         this.setState(({ status }) => {
@@ -56,7 +60,7 @@ class App extends React.Component {
           });
           return res.json();
         } else {
-          return "server error";
+          return "network error";
         }
       })
       .then(data => {
@@ -85,7 +89,7 @@ class App extends React.Component {
       body: getRegisterJson(values),
       headers
     };
-    const req = new Request(gEP(URL, ep.users.register), init);
+    const req = new Request(gEP(this.state.url, ep.users.register), init);
     fetch(req)
       .catch(err => {
         this.setState(({ status }) => {
@@ -105,7 +109,7 @@ class App extends React.Component {
           });
           return res.json();
         } else {
-          return "server error";
+          return "network error";
         }
       })
       .then(data => {
@@ -122,10 +126,10 @@ class App extends React.Component {
   }
 
   render() {
-    const { loggedin, userData, error, info, registered } = this.state;
+    const { loggedin, userData, error, info, registered, url } = this.state;
     return (
       <React.Fragment>
-        {loggedin && <Main userData={userData} dataLoadedHandler={this.dataLoaded} />}
+        {loggedin && <Main userData={userData} dataLoadedHandler={this.dataLoaded} url={url} />}
         {!loggedin && (
           <LoginPage
             loginHandler={this.loginHandler}

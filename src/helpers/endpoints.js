@@ -19,7 +19,8 @@ export const endpoints = {
   },
   exercises: {
     update: "/exercises/update" // PUT
-  }
+  },
+  ping: "/ping" // GET
 };
 
 export const getEndPoint = (URL, endpoint) => {

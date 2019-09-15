@@ -70,7 +70,16 @@ class GoalsCompletedList extends React.Component {
             })}
           </List>
         </Collapse>
-        {goal && <GoalModal open={goalModalOpen} goal={goal} handleNotDone={this.handleGoalNotDone} handleDone={this.handleGoalDone} handleClose={this.handleGoalModalClose}/>}
+        {goal && (
+          <GoalModal
+            open={goalModalOpen}
+            goal={goal}
+            handleNotDone={this.handleGoalNotDone}
+            handleDone={this.handleGoalDone}
+            handleClose={this.handleGoalModalClose}
+            handleGoalDelete={this.props.handleGoalDelete}
+          />
+        )}
       </div>
     );
   }
