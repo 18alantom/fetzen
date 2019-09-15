@@ -1,7 +1,7 @@
 import React from "react";
 import { withStyles } from "@material-ui/styles";
 import { fade, darken } from "@material-ui/core/styles/colorManipulator";
-import { Collapse, Link, Paper, Typography, TextField, Button } from "@material-ui/core";
+import { Collapse, Link, Paper, Typography, TextField, Button, InputAdornment } from "@material-ui/core";
 import styles from "./login-form-styles";
 
 // Custom Text Field to change the default colors.
@@ -25,6 +25,9 @@ const CustomTextField = withStyles(theme => ({
     },
     "& .MuiInputBase-input::-webkit-inner-spin-button": {
       appearance: "none"
+    },
+    "& .MuiTypography-colorTextSecondary": {
+      color: fade(theme.palette.primary.main, 0.5)
     }
   }
 }))(TextField);
@@ -38,7 +41,9 @@ class LoginForm extends React.Component {
         password: "password",
         repassword: "repassword",
         fname: "first name",
-        lname: "last name"
+        lname: "last name",
+        height: "height",
+        weight: "weight"
       },
       // If the inputNames are changed then change the keys below accordingly.
       values: {
@@ -46,7 +51,9 @@ class LoginForm extends React.Component {
         password: "",
         repassword: "",
         "first name": "",
-        "last name": ""
+        "last name": "",
+        height: "",
+        weight: ""
       },
       isRegister: false,
       error: "",
@@ -68,11 +75,11 @@ class LoginForm extends React.Component {
   }
   loginValidator() {
     const { inputNames, values } = this.state;
-    const loginInputs = [inputNames.username, inputNames.password];
+    const loginInputs = [inputNames.password, inputNames.username];
     let valid = true;
     loginInputs.forEach(i => {
       if (!this.inputValidator(values[i])) {
-        this.setState({ error: `${i} is invalid` });
+        this.setState({ error: `${i} is empty` });
         valid = false;
       }
     });
@@ -80,17 +87,26 @@ class LoginForm extends React.Component {
   }
   registerValidator() {
     const { inputNames, values } = this.state;
-    const registerInputs = [inputNames.password, inputNames.repassword, inputNames.lname, inputNames.fname];
+    const registerInputs = [inputNames.repassword, inputNames.password, inputNames.lname, inputNames.fname];
+    const registerInputNumbers = [inputNames.weight, inputNames.height];
     let valid = true;
     registerInputs.forEach(i => {
       if (!this.inputValidator(values[i])) {
-        this.setState({ error: `${i} is invalid` });
+        this.setState({ error: `${i} is empty` });
         valid = false;
       }
     });
     if (values[inputNames.password] !== values[inputNames.repassword]) {
       this.setState({ error: "passwords don't match" });
       valid = false;
+    }
+    if (valid) {
+      registerInputNumbers.forEach(i => {
+        if (isNaN(parseFloat(values[i])) || typeof values[i] <= 0) {
+          this.setState({ error: `${i} is invalid` });
+          valid = false;
+        }
+      });
     }
     return valid;
   }
@@ -126,22 +142,18 @@ class LoginForm extends React.Component {
         }
       }
     } else if (valid) {
-      if (!this.props.loginHandler(this.state.values)) {
-        this.setState({ error: "login failed" });
-      } else {
-        this.setState({ error: "", info: "logging in" });
-      }
+      this.props.loginHandler(this.state.values);
     }
   }
   render() {
-    const { classes } = this.props;
+    const { classes, fetchError } = this.props;
     const { info, error, isRegister, inputNames, values } = this.state;
     return (
       <div style={{ marginTop: 48 }}>
-        <Collapse in={error !== ""}>
-          <Typography className={`${classes.message} ${classes.error}`}>{error}</Typography>
+        <Collapse in={error !== "" || fetchError !== ""}>
+          <Typography className={`${classes.message} ${classes.error}`}>{fetchError || error}</Typography>
         </Collapse>
-        <Collapse in={info !== ""}>
+        <Collapse in={info !== "" && fetchError === ""}>
           <Typography className={`${classes.message} ${classes.info}`}>{info}</Typography>
         </Collapse>
         <Paper component="form" elevation={10} className={classes.form} id="login-form">
@@ -195,6 +207,32 @@ class LoginForm extends React.Component {
               name={inputNames.lname}
               value={values[inputNames.lname]}
               onChange={this.inputChangeHandler}
+            />
+            <CustomTextField
+              autoComplete="off"
+              label="Height"
+              fullWidth
+              className={classes.textField}
+              name={inputNames.height}
+              value={values[inputNames.height]}
+              onChange={this.inputChangeHandler}
+              type="number"
+              InputProps={{
+                endAdornment: <InputAdornment position="end">cm</InputAdornment>
+              }}
+            />
+            <CustomTextField
+              autoComplete="off"
+              label="Weight"
+              fullWidth
+              className={classes.textField}
+              name={inputNames.weight}
+              value={values[inputNames.weight]}
+              onChange={this.inputChangeHandler}
+              type="number"
+              InputProps={{
+                endAdornment: <InputAdornment position="end">kg</InputAdornment>
+              }}
             />
           </Collapse>
           <Button fullWidth variant="contained" type="submit" size="medium" className={classes.button} onClick={this.submitClickHandler}>

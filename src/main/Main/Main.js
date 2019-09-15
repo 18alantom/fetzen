@@ -1,4 +1,5 @@
 import uuid from "uuid/v1";
+import clone from "clone";
 import React from "react";
 import Navbar from "../Navbar/Navbar";
 import Sidebar from "../Sidebar/Sidebar";
@@ -10,6 +11,7 @@ import WorkoutModal from "../Modals/Workouts/WorkoutModal/WorkoutModal";
 import WorkoutAddModal from "../Modals/Workouts/WorkoutAddModal/WorkoutAddModal";
 import { lighten } from "@material-ui/core/styles/colorManipulator";
 import { userKeys, workoutKeys, exerciseKeys, goalKeys } from "../../helpers/constants";
+import { getUser } from "../../helpers/object-getters";
 import userData from "../dummy-data";
 
 export const CustomSnackbar = withStyles(theme => ({
@@ -46,6 +48,12 @@ class Main extends React.Component {
     this.handleGoalDelete = this.handleGoalDelete.bind(this);
     this.handleDoneClick = this.handleDoneClick.bind(this);
     this.toggleSnackBar = this.toggleSnackBar.bind(this);
+  }
+
+  componentDidMount() {
+    const { userData, dataLoadedHandler } = this.props;
+    this.setState({ data: getUser(clone(userData)) });
+    dataLoadedHandler();
   }
 
   toggleSnackBar() {
@@ -146,7 +154,7 @@ class Main extends React.Component {
       exercise[exerciseKeys.name] = name;
       return { data, doneMessage: `Updated exercise '${name}'.` };
     });
-    this.toggleSnackBar()
+    this.toggleSnackBar();
   }
 
   handleDoneClick(wid) {

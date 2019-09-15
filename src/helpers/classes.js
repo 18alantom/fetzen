@@ -1,9 +1,11 @@
 import uuid from "uuid/v1";
 // Classes
 export class User {
-  constructor(name = "", weight = 0, height = 0, goals = [], workouts = []) {
+  constructor(fname = "", lname = "", weight = 0, height = 0, goals = [], workouts = []) {
     this.id = uuid();
-    this.name = name;
+    this.fname = fname;
+    this.lname = lname;
+    this.name = fname + " " + lname;
     this.weight = weight; // in kgs
     this.height = height; // in centimeters
     this.goals = goals; // Array of goals

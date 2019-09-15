@@ -9,18 +9,14 @@ class LoginPage extends React.Component {
     super(props);
     this.state = {};
   }
-  loginHandler(values) {
-    // Add code to post login details.
-    console.log("logging in", values);
-    return true;
-  }
   registerHandler(values) {
     // Add code to register user.
     console.log("registering", values);
     return true;
+    // return false;
   }
   render() {
-    const { classes } = this.props;
+    const { classes, loginHandler, fetchError } = this.props;
     return (
       <div className={classes.container}>
         <div className={classes.titleBox}>
@@ -31,7 +27,7 @@ class LoginPage extends React.Component {
             The workout tracker.
           </Typography>
         </div>
-        <LoginForm loginHandler={this.loginHandler} registerHandler={this.registerHandler} />
+        <LoginForm loginHandler={loginHandler} fetchError={fetchError} registerHandler={this.registerHandler} />
       </div>
     );
   }
