@@ -5,18 +5,8 @@ import { withStyles } from "@material-ui/styles";
 import styles from "./login-page-styles";
 
 class LoginPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-  registerHandler(values) {
-    // Add code to register user.
-    console.log("registering", values);
-    return true;
-    // return false;
-  }
   render() {
-    const { classes, loginHandler, fetchError } = this.props;
+    const { classes, loginHandler, registerHandler, fetchError, fetchInfo, registered, dismissRegister } = this.props;
     return (
       <div className={classes.container}>
         <div className={classes.titleBox}>
@@ -27,7 +17,14 @@ class LoginPage extends React.Component {
             The workout tracker.
           </Typography>
         </div>
-        <LoginForm loginHandler={loginHandler} fetchError={fetchError} registerHandler={this.registerHandler} />
+        <LoginForm
+          loginHandler={loginHandler}
+          fetchError={fetchError}
+          registerHandler={registerHandler}
+          fetchInfo={fetchInfo}
+          registered={registered}
+          dismissRegister={dismissRegister}
+        />
       </div>
     );
   }

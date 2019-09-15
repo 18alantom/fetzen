@@ -56,8 +56,8 @@ class LoginForm extends React.Component {
         weight: ""
       },
       isRegister: false,
-      error: "",
-      info: ""
+      error: ""
+      // info: ""
     };
     this.linkClickHandler = this.linkClickHandler.bind(this);
     this.submitClickHandler = this.submitClickHandler.bind(this);
@@ -119,42 +119,42 @@ class LoginForm extends React.Component {
     });
   }
   linkClickHandler() {
-    this.setState(({ isRegister }) => ({ isRegister: !isRegister, error: "", info: "" }));
+    const { dismissRegister, registered } = this.props;
+    if (registered) {
+      dismissRegister();
+      if (this.state.isRegister) {
+        this.postRegisterHandler();
+      }
+    }
+    this.setState(({ isRegister }) => ({ isRegister: !isRegister, error: "" }));
   }
   postRegisterHandler() {
     this.setState(({ values, isRegister }) => {
       Object.keys(values).forEach(k => (values[k] = ""));
-      return { values, isRegister: !isRegister, info: "registered", error: "" };
+      return { values, isRegister: !isRegister, error: "" };
     });
   }
   submitClickHandler(e) {
     e.preventDefault();
     const { isRegister } = this.state;
-    let valid = this.loginValidator();
-    if (isRegister && valid) {
-      valid = this.registerValidator();
-      if (valid) {
-        if (this.props.registerHandler(this.state.values)) {
-          this.postRegisterHandler();
-        } else {
-          valid = false;
-          this.setState({ error: "registeration failed" });
-        }
-      }
+    const valid = this.loginValidator();
+    if (isRegister && valid && this.registerValidator()) {
+      this.props.registerHandler(this.state.values);
     } else if (valid) {
       this.props.loginHandler(this.state.values);
     }
   }
   render() {
-    const { classes, fetchError } = this.props;
-    const { info, error, isRegister, inputNames, values } = this.state;
+    const { classes, fetchError, fetchInfo } = this.props;
+    const { error, isRegister, inputNames, values } = this.state;
+
     return (
       <div style={{ marginTop: 48 }}>
         <Collapse in={error !== "" || fetchError !== ""}>
           <Typography className={`${classes.message} ${classes.error}`}>{fetchError || error}</Typography>
         </Collapse>
-        <Collapse in={info !== "" && fetchError === ""}>
-          <Typography className={`${classes.message} ${classes.info}`}>{info}</Typography>
+        <Collapse in={fetchInfo !== "" && fetchError === ""}>
+          <Typography className={`${classes.message} ${classes.info}`}>{fetchInfo}</Typography>
         </Collapse>
         <Paper component="form" elevation={10} className={classes.form} id="login-form">
           <Typography component="h3" className={classes.loginTitle}>
