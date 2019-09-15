@@ -42,3 +42,29 @@ export const getGoalUpdateJson = ({ id: g_id, complete, dateCompleted }) => {
   };
   return JSON.stringify(goal);
 };
+
+const getCycle = ({ id: c_id, intensity: c_intensity, reps: c_reps, rest: c_rest }) => {
+  return { c_id, c_intensity, c_reps, c_rest };
+};
+
+const getCycles = sets => {
+  const e_cycles = [];
+  for (let i in sets) {
+    e_cycles.push(getCycle(sets[i]));
+  }
+  return e_cycles;
+};
+
+export const getExerciseJson = ({ wid: w_id, eid: e_id, sets, note: e_note, name: e_name, seq: e_seq, units: e_unit }) => {
+  const exercise = {
+    w_id,
+    e_id,
+    e_name,
+    e_note,
+    e_seq,
+    e_unit,
+    w_date: new Date().toISOString().split("T")[0],
+    e_cycles: getCycles(sets)
+  };
+  return JSON.stringify(exercise);
+};

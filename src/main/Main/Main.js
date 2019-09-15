@@ -14,7 +14,7 @@ import { userKeys, workoutKeys, exerciseKeys, goalKeys } from "../../helpers/con
 import { getUser } from "../../helpers/object-getters";
 import { User } from "../../helpers/classes";
 import { getEndPoint as gEP, endpoints as ep } from "../../helpers/endpoints";
-import { getGoalAddJson, getGoalDeleteJson, getGoalUpdateJson } from "../../helpers/json-getters";
+import { getGoalAddJson, getGoalDeleteJson, getGoalUpdateJson, getExerciseJson } from "../../helpers/json-getters";
 
 export const CustomSnackbar = withStyles(theme => ({
   root: {
@@ -204,6 +204,8 @@ class Main extends React.Component {
 
   handleWorkoutAdd(workout) {
     this.setState(({ data }) => {
+      const seq = data[userKeys.workouts].length;
+      workout.seq = seq;
       data[userKeys.workouts].push(workout);
       return { data, doneMessage: `Added workout '${workout[workoutKeys.name]}'` };
     });
@@ -215,12 +217,13 @@ class Main extends React.Component {
       const { workouts } = data;
       const { name } = workouts.filter(w => w.id === id)[0];
       data.workouts = workouts.filter(w => w.id !== id);
+      data.workouts.forEach((w, i) => (w.seq = i));
       return { data, openModal: 0, doneMessage: `Deleted workout '${name}'` };
     });
     this.toggleSnackBar();
   }
 
-  handleWorkoutUpdate(wid, name, note, exercises, days) {
+  handleWorkoutUpdate(wid, name, note, exercises, days, _seq) {
     this.setState(({ data }) => {
       data.workouts.forEach(w => {
         if (w.id === wid) {
@@ -235,7 +238,8 @@ class Main extends React.Component {
     this.toggleSnackBar();
   }
 
-  handleExerciseUpdate(wid, eid, sets, note, name) {
+  handleExerciseUpdate(wid, eid, sets, note, name, seq, units) {
+    const doneMessage = `Updated exercise '${name}'.`;
     this.setState(({ data }) => {
       // Objects are passed by reference
       // that is why this works.
@@ -244,9 +248,10 @@ class Main extends React.Component {
       exercise[exerciseKeys.sets] = sets;
       exercise[exerciseKeys.note] = note;
       exercise[exerciseKeys.name] = name;
-      return { data, doneMessage: `Updated exercise '${name}'.` };
+      return { data };
     });
-    this.toggleSnackBar();
+    const body = getExerciseJson({ wid, eid, sets, note, name, seq, units });
+    this.sendData(ep.exercises.update, doneMessage, body, "PUT");
   }
 
   handleDoneClick(wid) {

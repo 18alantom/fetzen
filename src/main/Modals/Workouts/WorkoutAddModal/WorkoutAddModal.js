@@ -104,6 +104,8 @@ class WorkoutAddModal extends React.Component {
 
   handleAddExercise(exercise) {
     this.setState(({ workout }) => {
+      const seq = workout[workoutKeys.exercises].length;
+      exercise.seq = seq;
       workout[workoutKeys.exercises].push(exercise);
       return { workout, addExercise: false };
     });

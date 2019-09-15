@@ -35,9 +35,9 @@ class WorkoutCard extends React.Component {
     this.setState(({ collapsed }) => ({ collapsed: !collapsed }));
   }
 
-  handleExerciseUpdate(eid, sets, note, name) {
+  handleExerciseUpdate(eid, sets, note, name, seq, units) {
     const { handleExerciseUpdate, workout } = this.props;
-    handleExerciseUpdate(workout.id, eid, sets, note, name);
+    handleExerciseUpdate(workout.id, eid, sets, note, name, seq, units);
   }
 
   handleDoneButton() {

@@ -123,7 +123,7 @@ class ExerciseModal extends React.Component {
     const { handleClose, handleExerciseUpdate, exercise } = this.props;
     const { sets, note, name } = this.state;
     this.setState({ collapsed: false, error: "", change: false });
-    handleExerciseUpdate(exercise.id, sets, note, name);
+    handleExerciseUpdate(exercise.id, sets, note, name, exercise.seq, exercise[exerciseKeys.units]);
     handleClose();
   }
 
