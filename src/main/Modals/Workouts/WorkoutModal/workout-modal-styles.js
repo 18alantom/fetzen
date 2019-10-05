@@ -18,7 +18,8 @@ const styles = theme => {
       color: darken(theme.palette.primary.main, 0.2),
       marginTop: "4px",
       fontSize: "1rem",
-      letterSpacing: "2px"
+      letterSpacing: "2px",
+      cursor: "pointer"
     },
     exercise: {
       display: "flex",

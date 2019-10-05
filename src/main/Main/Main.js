@@ -43,7 +43,6 @@ class Main extends React.Component {
       workoutAddModalOpen: false,
       openModal: 0,
       data: new User(),
-      url: "",
       timerId: 0,
       alive: true,
       showDoneMessage: false,
@@ -67,12 +66,11 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
-    const { userData, dataLoadedHandler, url } = this.props;
+    const { userData, dataLoadedHandler, URL } = this.props;
     this.setState({
       data: getUser(clone(userData)),
-      url,
       timerId: setInterval(() => {
-        fetch(gEP(url, ep.ping))
+        fetch(gEP(URL, ep.ping))
           .catch(_err => {
             this.setState(({ alive }) => {
               if (alive) {
@@ -102,15 +100,16 @@ class Main extends React.Component {
     });
   }
 
-  sendData(endpoint, doneMessage, body = {}, method = "POST") {
-    const { url, alive } = this.state;
+  sendData(endpoint, doneMessage, body = {}, method = "POST", handleData) {
+    const { alive } = this.state;
+    const { URL } = this.props;
     const headers = new Headers({ "Content-Type": "application/json" });
     const init = {
       method,
       body,
       headers
     };
-    const req = new Request(gEP(url, endpoint), init);
+    const req = new Request(gEP(URL, endpoint), init);
     if (alive) {
       fetch(req)
         .catch(err => {
@@ -137,8 +136,12 @@ class Main extends React.Component {
         .then(data => {
           const { ok } = this.state.status;
           if (ok) {
-            this.setState({ doneMessage });
-            this.toggleSnackBar();
+            if (handleData) {
+              handleData(data);
+            } else {
+              this.setState({ doneMessage });
+              this.toggleSnackBar();
+            }
           } else {
             throw new Error(`${data}`);
           }
@@ -244,7 +247,6 @@ class Main extends React.Component {
       // This may be bad design.
       return { data };
     });
-    // this.sendData(ep.workouts.update, doneMessage, getWorkoutUpdateJson({ ...workout, seq, id, wED: exercisesRemoved }), "PUT");
     this.sendData(ep.workouts.update, doneMessage, getWorkoutUpdateJson({ ...workout, wED: exercisesRemoved }), "PUT");
   }
 
@@ -298,6 +300,7 @@ class Main extends React.Component {
         <div className={classes.cardsContainer}>
           {workouts.map((w, i) => (
             <WorkoutCard
+              sendData={this.sendData}
               workout={w}
               key={i}
               handleExerciseUpdate={this.handleExerciseUpdate}
@@ -320,6 +323,7 @@ class Main extends React.Component {
         )}
         {workouts.length !== 0 && (
           <WorkoutModal
+            sendData={this.sendData}
             key={workouts[openModal].id}
             wid={workouts[openModal].id}
             open={workoutModalOpen} // boolean to open the modal

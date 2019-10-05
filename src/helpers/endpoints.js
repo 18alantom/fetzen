@@ -15,10 +15,12 @@ export const endpoints = {
     add: "/workouts/add", // POST
     update: "/workouts/update", // PUT
     done: "/workouts/done", // PUT
-    delete: "/workouts/delete" // DELETE
+    delete: "/workouts/delete", // DELETE
+    last: "/workouts/last" // POST
   },
   exercises: {
-    update: "/exercises/update" // PUT
+    update: "/exercises/update", // PUT
+    stats: "/exercises/stats" // POSt
   },
   ping: "/ping" // GET
 };

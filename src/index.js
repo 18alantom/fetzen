@@ -6,10 +6,17 @@ import { CssBaseline } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
 import theme from "./themes";
 
+let URL;
+if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+  URL = "http://localhost:3000";
+} else {
+  URL = "";
+}
+
 ReactDOM.render(
   <ThemeProvider theme={theme}>
     <CssBaseline />
-    <App />
+    <App URL={URL}/>
   </ThemeProvider>,
   document.getElementById("root")
 );

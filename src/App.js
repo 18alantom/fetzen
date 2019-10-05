@@ -4,26 +4,27 @@ import { getLoginJson, getRegisterJson } from "./helpers/json-getters";
 import Main from "./main/Main/Main";
 import LoginPage from "./login/LoginPage/LoginPage";
 
-let URL;
-if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
-  URL = "http://localhost:3000";
-} else {
-  URL = "";
-}
+// let URL;
+// if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+//   URL = "http://localhost:3000";
+// } else {
+//   URL = "";
+// }
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { loggedin: false, registered: false, userData: {}, status: {}, error: "", info: "", url: "" };
+    // this.state = { loggedin: false, registered: false, userData: {}, status: {}, error: "", info: "", url: "" };
+    this.state = { loggedin: false, registered: false, userData: {}, status: {}, error: "", info: "" };
     this.loginHandler = this.loginHandler.bind(this);
     this.dataLoaded = this.dataLoaded.bind(this);
     this.registerHandler = this.registerHandler.bind(this);
     this.dismissRegister = this.dismissRegister.bind(this);
   }
 
-  componentDidMount() {
-    this.setState({ url: URL });
-  }
+  // componentDidMount() {
+  //   this.setState({ url: URL });
+  // }
 
   dismissRegister() {
     this.setState({ userData: {}, status: {}, error: "", info: "", registered: false, loggedin: false });
@@ -40,7 +41,7 @@ class App extends React.Component {
       body: getLoginJson(values),
       headers
     };
-    const req = new Request(gEP(this.state.url, ep.users.login), init);
+    const req = new Request(gEP(this.props.URL, ep.users.login), init);
     fetch(req)
       .catch(err => {
         this.setState(({ status }) => {
@@ -89,7 +90,7 @@ class App extends React.Component {
       body: getRegisterJson(values),
       headers
     };
-    const req = new Request(gEP(this.state.url, ep.users.register), init);
+    const req = new Request(gEP(this.props.URL, ep.users.register), init);
     fetch(req)
       .catch(err => {
         this.setState(({ status }) => {
@@ -126,10 +127,11 @@ class App extends React.Component {
   }
 
   render() {
-    const { loggedin, userData, error, info, registered, url } = this.state;
+    const { loggedin, userData, error, info, registered } = this.state;
+    const { URL } = this.props;
     return (
       <React.Fragment>
-        {loggedin && <Main userData={userData} dataLoadedHandler={this.dataLoaded} url={url} />}
+        {loggedin && <Main userData={userData} dataLoadedHandler={this.dataLoaded} URL={URL} />}
         {!loggedin && (
           <LoginPage
             loginHandler={this.loginHandler}

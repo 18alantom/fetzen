@@ -46,7 +46,7 @@ class WorkoutCard extends React.Component {
   }
 
   render() {
-    const { classes, workout, handleWorkoutModalOpen } = this.props;
+    const { classes, workout, handleWorkoutModalOpen, sendData } = this.props;
     const { collapsed, openModal, exerciseModalOpen } = this.state;
     return (
       <Card className={classes.card} style={{ height: workout }}>
@@ -83,6 +83,7 @@ class WorkoutCard extends React.Component {
         </div>
         {Boolean(workout[workoutKeys.exercises][openModal]) && (
           <ExerciseModal
+            sendData={sendData}
             open={exerciseModalOpen}
             exercise={workout[workoutKeys.exercises][openModal]}
             // Changing key causes component to unmount and nullifies the antipattern

@@ -8,6 +8,7 @@ import { ExpandMore, ExpandLess } from "@material-ui/icons";
 import { Typography, IconButton, ClickAwayListener, Collapse } from "@material-ui/core";
 import { CustomTextField2, CustomTextField3 } from "../../CustomTextField";
 import { Days, AreYouSure, Exercise } from "./WorkoutModalComponents";
+import { endpoints } from "../../../../helpers/endpoints";
 import { LeftButton, RightButton } from "../../CustomButton";
 import { getDay } from "../../../../helpers/helpers";
 import { AddExercise } from "./AddExercise";
@@ -25,7 +26,8 @@ class WorkoutModal extends React.Component {
       change: false,
       confirmDelete: false,
       addExercise: false,
-      collapsed: false // collapsed = false means it is collapsed
+      collapsed: false, // collapsed = false means it is collapsed
+      last: []
     };
     this.handleCollapseButton = this.handleCollapseButton.bind(this);
     this.handleRemoveExercise = this.handleRemoveExercise.bind(this);
@@ -38,10 +40,21 @@ class WorkoutModal extends React.Component {
     this.handleAddExercise = this.handleAddExercise.bind(this);
     this.handleCancelAddExercise = this.handleCancelAddExercise.bind(this);
     this.updateAndClose = this.updateAndClose.bind(this);
+    this.handleDoneDateClick = this.handleDoneDateClick.bind(this);
     this.restoreAndClose = this.restoreAndClose.bind(this);
     // Refs
     this.workoutNameRef = React.createRef();
   }
+
+  componentDidMount() {
+    const { sendData, workout } = this.props;
+    const body = JSON.stringify({ w_id: workout.id });
+    sendData(endpoints.workouts.last, "", body, "POST", last => {
+      console.log(last);
+      this.setState({ last });
+    });
+  }
+
   handleCollapseButton() {
     this.setState(({ collapsed }) => ({ collapsed: !collapsed, error: "" }));
   }
@@ -145,8 +158,13 @@ class WorkoutModal extends React.Component {
       return { exercises, addExercise: false, change: true };
     });
   }
+
   handleCancelAddExercise() {
     this.setState({ addExercise: false });
+  }
+
+  handleDoneDateClick() {
+    console.log(this.state.last);
   }
 
   render() {
@@ -173,7 +191,7 @@ class WorkoutModal extends React.Component {
                 onChange={this.handleNameChange}
               />
               {workout[workoutKeys.last] && (
-                <Typography component="h3" className={`${classes.lastCompleted}`}>
+                <Typography component="h3" className={`${classes.lastCompleted}`} onClick={this.handleDoneDateClick}>
                   {workout[workoutKeys.last].toDateString()}
                 </Typography>
               )}

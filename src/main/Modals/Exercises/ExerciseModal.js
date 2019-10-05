@@ -7,6 +7,7 @@ import { IconButton, Collapse, Typography, InputAdornment, ClickAwayListener } f
 import { CustomTextField1, CustomTextField2, CustomTextField4 } from "../CustomTextField";
 import { Cycle } from "../../../helpers/classes";
 import { LeftButton, RightButton } from "../CustomButton";
+import { endpoints } from "../../../helpers/endpoints";
 import styles from "./exercise-modal-styles";
 import CustomDialog from "../CustomDialog";
 
@@ -82,7 +83,8 @@ class ExerciseModal extends React.Component {
       name: this.props.exercise[exerciseKeys.name],
       newSet: new Cycle(0, 0, 0),
       collapsed: false, // collapsed = false means it is collapsed
-      change: false
+      change: false,
+      stats: null
     };
     this.handleSetChange = this.handleSetChange.bind(this);
     this.handleNewSetChange = this.handleNewSetChange.bind(this);
@@ -92,6 +94,15 @@ class ExerciseModal extends React.Component {
     this.handleNoteChange = this.handleNoteChange.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleAddRemove = this.handleAddRemove.bind(this);
+  }
+
+  componentDidMount() {
+    const { sendData, exercise } = this.props;
+    const body = JSON.stringify({ e_id: exercise.id });
+    sendData(endpoints.exercises.stats, "", body, "POST", stats => {
+      console.log(stats);
+      this.setState({ stats });
+    });
   }
 
   handleSetChange(id, name, value) {
