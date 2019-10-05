@@ -38,8 +38,13 @@ const styles = theme => {
     },
     buttonContainer: {
       marginTop: "14px",
-      display: "flex",
-      justifyContent: "space-between"
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr 1fr"
+    },
+    buttonContainerTwo: {
+      marginTop: "14px",
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr"
     },
     addRemoveButton: {
       marginTop: "4px",

@@ -8,6 +8,7 @@ import { CustomTextField1, CustomTextField2, CustomTextField4 } from "../CustomT
 import { Cycle } from "../../../helpers/classes";
 import { LeftButton, RightButton } from "../CustomButton";
 import { endpoints } from "../../../helpers/endpoints";
+import Stats from "./Stats/Stats";
 import styles from "./exercise-modal-styles";
 import CustomDialog from "../CustomDialog";
 
@@ -84,6 +85,7 @@ class ExerciseModal extends React.Component {
       newSet: new Cycle(0, 0, 0),
       collapsed: false, // collapsed = false means it is collapsed
       change: false,
+      showStats: false,
       stats: null
     };
     this.handleSetChange = this.handleSetChange.bind(this);
@@ -94,13 +96,13 @@ class ExerciseModal extends React.Component {
     this.handleNoteChange = this.handleNoteChange.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleAddRemove = this.handleAddRemove.bind(this);
+    this.showStats = this.showStats.bind(this);
   }
 
   componentDidMount() {
     const { sendData, exercise } = this.props;
     const body = JSON.stringify({ e_id: exercise.id });
     sendData(endpoints.exercises.stats, "", body, "POST", stats => {
-      console.log(stats);
       this.setState({ stats });
     });
   }
@@ -126,14 +128,14 @@ class ExerciseModal extends React.Component {
   restoreAndClose() {
     const { exercise, handleClose } = this.props;
     const { sets, note, name } = exercise;
-    this.setState({ sets: clone(sets), note, name, collapsed: false, error: "", change: false });
+    this.setState({ sets: clone(sets), note, name, collapsed: false, error: "", change: false, showStats: false, stats: null });
     handleClose();
   }
 
   updateAndClose() {
     const { handleClose, handleExerciseUpdate, exercise } = this.props;
     const { sets, note, name } = this.state;
-    this.setState({ collapsed: false, error: "", change: false });
+    this.setState({ collapsed: false, error: "", change: false, showStats: false, stats: null });
     handleExerciseUpdate(exercise.id, sets, note, name, exercise.seq, exercise[exerciseKeys.units]);
     handleClose();
   }
@@ -172,9 +174,13 @@ class ExerciseModal extends React.Component {
     });
   }
 
+  showStats() {
+    this.setState(({ showStats }) => ({ showStats: !showStats }));
+  }
+
   render() {
     const { open, classes, exercise } = this.props;
-    const { collapsed, note, newSet, error, sets, name, change } = this.state;
+    const { collapsed, note, newSet, error, sets, name, change, showStats, stats } = this.state;
     const { length } = sets;
     return (
       <CustomDialog
@@ -193,62 +199,84 @@ class ExerciseModal extends React.Component {
                 {length} sets
               </Typography>
             </div>
-            <Collapse in={error !== ""}>
-              <Typography component="p" className={`${classes.error}`} color="error">
-                {error}
-              </Typography>
-            </Collapse>
 
-            <div className={`${classes.setsContainer}`}>
-              {sets.map((set, i) => (
-                <Set
-                  key={i}
-                  set={set}
-                  index={i + 1}
-                  units={exercise[exerciseKeys.units]}
-                  onSetContentUpdate={this.handleSetChange}
-                  onAddRemoveClick={this.handleAddRemove}
-                  collapsed={collapsed}
-                />
-              ))}
-            </div>
+            <Collapse in={!showStats}>
+              <Collapse in={error !== ""}>
+                <Typography component="p" className={`${classes.error}`} color="error">
+                  {error}
+                </Typography>
+              </Collapse>
 
-            <Collapse in={collapsed}>
-              <div>
-                <Set
-                  set={newSet}
-                  index={length + 1}
-                  units={exercise[exerciseKeys.units]}
-                  onNewSetContentUpdate={this.handleNewSetChange}
-                  onAddRemoveClick={this.handleAddRemove}
-                  collapsed={collapsed}
+              <div className={`${classes.setsContainer}`}>
+                {sets.map((set, i) => (
+                  <Set
+                    key={i}
+                    set={set}
+                    index={i + 1}
+                    units={exercise[exerciseKeys.units]}
+                    onSetContentUpdate={this.handleSetChange}
+                    onAddRemoveClick={this.handleAddRemove}
+                    collapsed={collapsed}
+                  />
+                ))}
+              </div>
+
+              <Collapse in={collapsed}>
+                <div>
+                  <Set
+                    set={newSet}
+                    index={length + 1}
+                    units={exercise[exerciseKeys.units]}
+                    onNewSetContentUpdate={this.handleNewSetChange}
+                    onAddRemoveClick={this.handleAddRemove}
+                    collapsed={collapsed}
+                  />
+                </div>
+              </Collapse>
+              <Collapse in={collapsed || note !== ""}>
+                <CustomTextField2
+                  placeholder="Add a note"
+                  value={note}
+                  rowsMax="4"
+                  multiline
+                  onChange={this.handleNoteChange}
+                  fullWidth
+                  disabled={!collapsed}
+                  className={`${classes.note}`}
                 />
+              </Collapse>
+
+              <div className={`${classes.buttonContainer}`}>
+                {!collapsed && stats ? (
+                  <LeftButton className={`${classes.button}`} onClick={this.showStats} disableRipple>
+                    stats
+                  </LeftButton>
+                ) : (
+                  <LeftButton className={`${classes.button}`} onClick={this.updateAndClose} disabled={!change} disableRipple>
+                    update
+                  </LeftButton>
+                )}
+                <IconButton disableRipple size="small" className={`${classes.button}`} onClick={this.handleCollapseButton}>
+                  {collapsed ? <ExpandLess /> : <ExpandMore />}
+                </IconButton>
+                <RightButton style={{ textAlign: "left" }} className={`${classes.button}`} onClick={this.restoreAndClose} disableRipple>
+                  close
+                </RightButton>
               </div>
             </Collapse>
-            <Collapse in={collapsed || note !== ""}>
-              <CustomTextField2
-                placeholder="Add a note"
-                value={note}
-                rowsMax="4"
-                multiline
-                onChange={this.handleNoteChange}
-                fullWidth
-                disabled={!collapsed}
-                className={`${classes.note}`}
-              />
-            </Collapse>
-
-            <div className={`${classes.buttonContainer}`}>
-              <LeftButton className={`${classes.button}`} onClick={this.updateAndClose} disabled={!change} disableRipple>
-                update
-              </LeftButton>
-              <IconButton disableRipple size="small" className={`${classes.button}`} onClick={this.handleCollapseButton}>
-                {collapsed ? <ExpandLess /> : <ExpandMore />}
-              </IconButton>
-              <RightButton style={{ textAlign: "left" }} className={`${classes.button}`} onClick={this.restoreAndClose} disableRipple>
-                close
-              </RightButton>
-            </div>
+            {stats && (
+              <Collapse in={showStats && !collapsed}>
+                <Stats stats={stats} units={exercise[exerciseKeys.units]} />
+                <div className={`${classes.buttonContainerTwo}`}>
+                  <LeftButton className={`${classes.button}`} onClick={this.showStats} disableRipple>
+                    sets
+                  </LeftButton>
+                  <RightButton style={{ textAlign: "left" }} className={`${classes.button}`} onClick={this.restoreAndClose} disableRipple>
+                    close
+                  </RightButton>
+                </div>
+              </Collapse>
+            )}
           </div>
         </ClickAwayListener>
       </CustomDialog>

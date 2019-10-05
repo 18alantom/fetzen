@@ -50,7 +50,6 @@ class WorkoutModal extends React.Component {
     const { sendData, workout } = this.props;
     const body = JSON.stringify({ w_id: workout.id });
     sendData(endpoints.workouts.last, "", body, "POST", last => {
-      console.log(last);
       this.setState({ last });
     });
   }
