@@ -14,6 +14,14 @@ const Navbar = props => {
       <Typography className={classes.title} component="h1">
         FETZEN
       </Typography>
+      <div className={`${classes.linkContainer}`}>
+        <Typography className={classes.link} component="button" onClick={props.openProfileModal}>
+          Profile
+        </Typography>
+        <Typography className={classes.link} component="button" onClick={props.handleLogout}>
+          Logout
+        </Typography>
+      </div>
     </AppBar>
   );
 };

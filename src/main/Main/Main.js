@@ -282,12 +282,12 @@ class Main extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, logoutHandler } = this.props;
     const { workoutModalOpen, openModal, showDoneMessage, doneMessage, doneMessageDuration, workoutAddModalOpen } = this.state;
     const { goals, workouts } = this.state.data;
     return (
       <div className={classes.mainContainer}>
-        <Navbar />
+        <Navbar handleLogout={logoutHandler} />
         <Sidebar
           workouts={workouts}
           goals={goals}

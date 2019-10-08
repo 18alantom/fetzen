@@ -4,27 +4,16 @@ import { getLoginJson, getRegisterJson } from "./helpers/json-getters";
 import Main from "./main/Main/Main";
 import LoginPage from "./login/LoginPage/LoginPage";
 
-// let URL;
-// if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
-//   URL = "http://localhost:3000";
-// } else {
-//   URL = "";
-// }
-
 class App extends React.Component {
   constructor(props) {
     super(props);
-    // this.state = { loggedin: false, registered: false, userData: {}, status: {}, error: "", info: "", url: "" };
     this.state = { loggedin: false, registered: false, userData: {}, status: {}, error: "", info: "" };
     this.loginHandler = this.loginHandler.bind(this);
+    this.logoutHandler = this.logoutHandler.bind(this);
     this.dataLoaded = this.dataLoaded.bind(this);
     this.registerHandler = this.registerHandler.bind(this);
     this.dismissRegister = this.dismissRegister.bind(this);
   }
-
-  // componentDidMount() {
-  //   this.setState({ url: URL });
-  // }
 
   dismissRegister() {
     this.setState({ userData: {}, status: {}, error: "", info: "", registered: false, loggedin: false });
@@ -126,12 +115,16 @@ class App extends React.Component {
       });
   }
 
+  logoutHandler() {
+    this.setState({ loggedin: false, registered: false, userData: {}, status: {}, error: "", info: "" });
+  }
+
   render() {
     const { loggedin, userData, error, info, registered } = this.state;
     const { URL } = this.props;
     return (
       <React.Fragment>
-        {loggedin && <Main userData={userData} dataLoadedHandler={this.dataLoaded} URL={URL} />}
+        {loggedin && <Main userData={userData} dataLoadedHandler={this.dataLoaded} URL={URL} logoutHandler={this.logoutHandler} />}
         {!loggedin && (
           <LoginPage
             loginHandler={this.loginHandler}
