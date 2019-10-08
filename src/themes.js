@@ -7,14 +7,15 @@ const theme = createMuiTheme({
       main: deepOrange[500]
     },
     secondary: {
+      light: grey[600],
       main: grey[900]
     },
     success: green,
-    error: red,
+    error: red
   },
   typography: {
     fontFamily: "'Lato', 'sans-serif'",
-    titleFontFamily: "'Righteous', 'sans-serif'"
+    titleFontFamily: "'Righteous', Arial, 'sans-serif'"
   }
 });
 
