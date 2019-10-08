@@ -27,7 +27,7 @@ const styles = theme => {
       background: "transparent",
       border: "none",
       letterSpacing: "2px",
-      fontSize: "1.2rem",
+      fontSize: "1rem",
       padding: "0px 32px 0px 0px",
       cursor: "pointer",
       transitionDuration: "200ms",

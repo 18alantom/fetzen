@@ -74,6 +74,7 @@ class Main extends React.Component {
     this.toggleProfileModal = this.toggleProfileModal.bind(this);
     this.toggleLogWeightModal = this.toggleLogWeightModal.bind(this);
     this.sendData = this.sendData.bind(this);
+    this.dataUpdated = this.dataUpdated.bind(this);
   }
 
   componentDidMount() {
@@ -109,6 +110,10 @@ class Main extends React.Component {
       clearInterval(timerId);
       return { data: {} };
     });
+  }
+
+  dataUpdated() {
+    this.props.saveToLocalStorage("userData", this.state.data);
   }
 
   sendData(endpoint, doneMessage, body = {}, method = "POST", handleData) {
@@ -184,10 +189,15 @@ class Main extends React.Component {
 
   handleGoalAdd(goal) {
     const doneMessage = `Set goal '${goal[goalKeys.title]}'`;
-    this.setState(({ data }) => {
-      data.goals.push(goal);
-      return { data };
-    });
+    this.setState(
+      ({ data }) => {
+        data.goals.push(goal);
+        return { data };
+      },
+      () => {
+        this.dataUpdated();
+      }
+    );
     this.sendData(ep.goals.add, doneMessage, getGoalAddJson({ ...goal, uid: this.state.id }), "POST");
   }
 
@@ -197,10 +207,15 @@ class Main extends React.Component {
     goals = goals.filter(g => g.id !== id);
     const doneMessage = `Removed goal '${goalToRemove[goalKeys.title]}'`;
 
-    this.setState(({ data }) => {
-      data[userKeys.goals] = goals;
-      return { data };
-    });
+    this.setState(
+      ({ data }) => {
+        data[userKeys.goals] = goals;
+        return { data };
+      },
+      () => {
+        this.dataUpdated();
+      }
+    );
 
     this.sendData(ep.goals.delete, doneMessage, getGoalDeleteJson(id), "DELETE");
   }
@@ -218,9 +233,14 @@ class Main extends React.Component {
       goal[goalKeys.dateCompleted] = undefined;
       doneMessage = `Reset goal '${goal[goalKeys.title]}'`;
     }
-    this.setState(({ data }) => {
-      return { data };
-    });
+    this.setState(
+      ({ data }) => {
+        return { data };
+      },
+      () => {
+        this.dataUpdated();
+      }
+    );
     this.sendData(ep.goals.update, doneMessage, getGoalUpdateJson(goal), "PUT");
   }
 
@@ -229,21 +249,31 @@ class Main extends React.Component {
     const seq = this.state.data[userKeys.workouts].length;
     workout.seq = seq;
 
-    this.setState(({ data }) => {
-      data[userKeys.workouts].push(workout);
-      return { data };
-    });
+    this.setState(
+      ({ data }) => {
+        data[userKeys.workouts].push(workout);
+        return { data };
+      },
+      () => {
+        this.dataUpdated();
+      }
+    );
     this.sendData(ep.workouts.add, doneMessage, getWorkoutAddJson({ ...workout, uid: this.state.data.id }), "POST");
   }
 
   handleDeleteWorkoutConfirm(id, name) {
     const doneMessage = `Deleted workout '${name}'`;
-    this.setState(({ data }) => {
-      const { workouts } = data;
-      data.workouts = workouts.filter(w => w.id !== id);
-      data.workouts.forEach((w, i) => (w.seq = i));
-      return { data, openModal: 0 };
-    });
+    this.setState(
+      ({ data }) => {
+        const { workouts } = data;
+        data.workouts = workouts.filter(w => w.id !== id);
+        data.workouts.forEach((w, i) => (w.seq = i));
+        return { data, openModal: 0 };
+      },
+      () => {
+        this.dataUpdated();
+      }
+    );
     this.sendData(ep.workouts.delete, doneMessage, getWorkoutDelete(id), "DELETE");
   }
 
@@ -254,25 +284,35 @@ class Main extends React.Component {
     workout[workoutKeys.note] = note;
     workout[workoutKeys.exercises] = exercises;
     workout[workoutKeys.days] = days;
-    this.setState(({ data }) => {
-      // This may be bad design.
-      return { data };
-    });
+    this.setState(
+      ({ data }) => {
+        // This may be bad design.
+        return { data };
+      },
+      () => {
+        this.dataUpdated();
+      }
+    );
     this.sendData(ep.workouts.update, doneMessage, getWorkoutUpdateJson({ ...workout, wED: exercisesRemoved }), "PUT");
   }
 
   handleExerciseUpdate(wid, eid, sets, note, name, seq, units) {
     const doneMessage = `Updated exercise '${name}'.`;
-    this.setState(({ data }) => {
-      // Objects are passed by reference
-      // that is why this works.
-      const workout = data[userKeys.workouts].filter(w => w.id === wid)[0];
-      const exercise = workout[workoutKeys.exercises].filter(e => e.id === eid)[0];
-      exercise[exerciseKeys.sets] = sets;
-      exercise[exerciseKeys.note] = note;
-      exercise[exerciseKeys.name] = name;
-      return { data };
-    });
+    this.setState(
+      ({ data }) => {
+        // Objects are passed by reference
+        // that is why this works.
+        const workout = data[userKeys.workouts].filter(w => w.id === wid)[0];
+        const exercise = workout[workoutKeys.exercises].filter(e => e.id === eid)[0];
+        exercise[exerciseKeys.sets] = sets;
+        exercise[exerciseKeys.note] = note;
+        exercise[exerciseKeys.name] = name;
+        return { data };
+      },
+      () => {
+        this.dataUpdated();
+      }
+    );
     const body = getExerciseJson({ wid, eid, sets, note, name, seq, units });
     this.sendData(ep.exercises.update, doneMessage, body, "PUT");
   }
@@ -281,14 +321,19 @@ class Main extends React.Component {
     const workout = this.state.data[userKeys.workouts].filter(w => w.id === wid)[0];
     const last = new Date();
     const doneMessage = `Completed ${workout.name} on ${last.toDateString()}.`;
-    this.setState(({ data }) => {
-      data.workouts.forEach(w => {
-        if (w.id === wid) {
-          w[workoutKeys.last] = last;
-        }
-      });
-      return { data };
-    });
+    this.setState(
+      ({ data }) => {
+        data.workouts.forEach(w => {
+          if (w.id === wid) {
+            w[workoutKeys.last] = last;
+          }
+        });
+        return { data };
+      },
+      () => {
+        this.dataUpdated();
+      }
+    );
     this.sendData(ep.workouts.done, doneMessage, getWorkoutDone({ ...workout, last }), "PUT");
   }
 
@@ -304,10 +349,15 @@ class Main extends React.Component {
     let value = parseFloat(val);
     const doneMessage = `Logged weight: ${value} ${this.state.wUnit}.`;
     const { id } = this.state.data;
-    this.setState(({ data }) => {
-      data.weight = value;
-      return { data };
-    });
+    this.setState(
+      ({ data }) => {
+        data.weight = value;
+        return { data };
+      },
+      () => {
+        this.dataUpdated();
+      }
+    );
     this.sendData(ep.users.weightLog, doneMessage, getLogWeight({ id, value }), "PUT");
   }
 
@@ -330,7 +380,6 @@ class Main extends React.Component {
       hUnit
     } = this.state;
     const { goals, workouts, id, fname, lname, weight, height } = this.state.data;
-    console.log(this.state.data);
     return (
       <div className={classes.mainContainer}>
         <Navbar handleLogout={logoutHandler} handleProfileClick={this.handleProfileClick} handleLogWeightClick={this.toggleLogWeightModal} />

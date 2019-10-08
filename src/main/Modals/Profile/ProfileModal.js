@@ -23,7 +23,6 @@ class ProfileModal extends React.Component {
     const body = JSON.stringify({ u_id: id });
     sendData(endpoints.users.weightObtainAll, "", body, "POST", weights => {
       this.setState(() => {
-        console.log(weights);
         if (!weights.reverse) {
           return { weights: null };
         } else {
