@@ -15,6 +15,9 @@ const Navbar = props => {
         FETZEN
       </Typography>
       <div className={`${classes.linkContainer}`}>
+        <Typography className={classes.link} component="button" onClick={props.handleLogWeightClick}>
+          Log Weight
+        </Typography>
         <Typography className={classes.link} component="button" onClick={props.handleProfileClick}>
           Profile
         </Typography>

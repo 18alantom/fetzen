@@ -4,6 +4,7 @@ import React from "react";
 import Navbar from "../Navbar/Navbar";
 import Sidebar from "../Sidebar/Sidebar";
 import ProfileModal from "../Modals/Profile/ProfileModal";
+import WeightLogModal from "../Modals/WeightAdd/WeightLogModal";
 import WorkoutCard from "../WorkoutCard/WorkoutCard";
 import { Snackbar, Typography } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
@@ -23,7 +24,8 @@ import {
   getWorkoutAddJson,
   getWorkoutUpdateJson,
   getWorkoutDelete,
-  getWorkoutDone
+  getWorkoutDone,
+  getLogWeight
 } from "../../helpers/json-getters";
 
 export const CustomSnackbar = withStyles(theme => ({
@@ -43,6 +45,7 @@ class Main extends React.Component {
       workoutModalOpen: false,
       workoutAddModalOpen: false,
       profileModalOpen: false,
+      logWeightModalOpen: false,
       openModal: 0,
       data: new User(),
       timerId: 0,
@@ -55,6 +58,7 @@ class Main extends React.Component {
       status: {}
     };
     this.handleWorkoutModalOpen = this.handleWorkoutModalOpen.bind(this);
+    this.handleLogWeightModalUpdate = this.handleLogWeightModalUpdate.bind(this);
     this.handleWorkoutAddModalToggle = this.handleWorkoutAddModalToggle.bind(this);
     this.handleWorkoutModalClose = this.handleWorkoutModalClose.bind(this);
     this.handleDeleteWorkoutConfirm = this.handleDeleteWorkoutConfirm.bind(this);
@@ -68,6 +72,7 @@ class Main extends React.Component {
     this.handleDoneClick = this.handleDoneClick.bind(this);
     this.toggleSnackBar = this.toggleSnackBar.bind(this);
     this.toggleProfileModal = this.toggleProfileModal.bind(this);
+    this.toggleLogWeightModal = this.toggleLogWeightModal.bind(this);
     this.sendData = this.sendData.bind(this);
   }
 
@@ -290,18 +295,45 @@ class Main extends React.Component {
   toggleProfileModal() {
     this.setState(({ profileModalOpen }) => ({ profileModalOpen: !profileModalOpen }));
   }
+
+  toggleLogWeightModal() {
+    this.setState(({ logWeightModalOpen }) => ({ logWeightModalOpen: !logWeightModalOpen }));
+  }
+
+  handleLogWeightModalUpdate(val) {
+    let value = parseFloat(val);
+    const doneMessage = `Logged weight: ${value} ${this.state.wUnit}.`;
+    const { id } = this.state.data;
+    this.setState(({ data }) => {
+      data.weight = value;
+      return { data };
+    });
+    this.sendData(ep.users.weightLog, doneMessage, getLogWeight({ id, value }), "PUT");
+  }
+
   handleProfileClick() {
     this.toggleProfileModal();
   }
 
   render() {
     const { classes, logoutHandler } = this.props;
-    const { workoutModalOpen, profileModalOpen, openModal, showDoneMessage, doneMessage, doneMessageDuration, workoutAddModalOpen, wUnit, hUnit } = this.state;
+    const {
+      workoutModalOpen,
+      profileModalOpen,
+      openModal,
+      showDoneMessage,
+      doneMessage,
+      doneMessageDuration,
+      workoutAddModalOpen,
+      logWeightModalOpen,
+      wUnit,
+      hUnit
+    } = this.state;
     const { goals, workouts, id, fname, lname, weight, height } = this.state.data;
     console.log(this.state.data);
     return (
       <div className={classes.mainContainer}>
-        <Navbar handleLogout={logoutHandler} handleProfileClick={this.handleProfileClick} />
+        <Navbar handleLogout={logoutHandler} handleProfileClick={this.handleProfileClick} handleLogWeightClick={this.toggleLogWeightModal} />
         <Sidebar
           workouts={workouts}
           goals={goals}
@@ -350,7 +382,7 @@ class Main extends React.Component {
         <WorkoutAddModal open={workoutAddModalOpen} handleWorkoutAddModalToggle={this.handleWorkoutAddModalToggle} handleWorkoutAdd={this.handleWorkoutAdd} />
         {fname.length > 0 && (
           <ProfileModal
-            key={id}
+            key={id + weight}
             open={profileModalOpen}
             sendData={this.sendData}
             id={id}
@@ -363,6 +395,14 @@ class Main extends React.Component {
             hUnit={hUnit}
           />
         )}
+        <WeightLogModal
+          key={weight}
+          open={logWeightModalOpen}
+          handleClose={this.toggleLogWeightModal}
+          handleUpdate={this.handleLogWeightModalUpdate}
+          wUnit={wUnit}
+          initValue={weight}
+        />
       </div>
     );
   }

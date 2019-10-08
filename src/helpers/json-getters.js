@@ -142,3 +142,12 @@ export const getWorkoutDone = ({ id: w_id, last, note: w_note, exercises }) => {
 export const getWorkoutDelete = w_id => {
   return JSON.stringify({ w_id });
 };
+
+export const getLogWeight = ({ id, value }) => {
+  const weightLog = {
+    u_id: id,
+    u_date_created: new Date().toISOString().split("Z")[0],
+    u_weight: value
+  };
+  return JSON.stringify(weightLog);
+};
