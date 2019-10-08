@@ -15,7 +15,7 @@ const Navbar = props => {
         FETZEN
       </Typography>
       <div className={`${classes.linkContainer}`}>
-        <Typography className={classes.link} component="button" onClick={props.openProfileModal}>
+        <Typography className={classes.link} component="button" onClick={props.handleProfileClick}>
           Profile
         </Typography>
         <Typography className={classes.link} component="button" onClick={props.handleLogout}>

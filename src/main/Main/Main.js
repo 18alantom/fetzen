@@ -3,6 +3,7 @@ import clone from "clone";
 import React from "react";
 import Navbar from "../Navbar/Navbar";
 import Sidebar from "../Sidebar/Sidebar";
+import ProfileModal from "../Modals/Profile/ProfileModal";
 import WorkoutCard from "../WorkoutCard/WorkoutCard";
 import { Snackbar, Typography } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
@@ -41,6 +42,7 @@ class Main extends React.Component {
     this.state = {
       workoutModalOpen: false,
       workoutAddModalOpen: false,
+      profileModalOpen: false,
       openModal: 0,
       data: new User(),
       timerId: 0,
@@ -48,6 +50,8 @@ class Main extends React.Component {
       showDoneMessage: false,
       doneMessage: "",
       doneMessageDuration: 3000,
+      wUnit: "kg",
+      hUnit: "cm",
       status: {}
     };
     this.handleWorkoutModalOpen = this.handleWorkoutModalOpen.bind(this);
@@ -57,11 +61,13 @@ class Main extends React.Component {
     this.handleWorkoutAdd = this.handleWorkoutAdd.bind(this);
     this.handleWorkoutUpdate = this.handleWorkoutUpdate.bind(this);
     this.handleExerciseUpdate = this.handleExerciseUpdate.bind(this);
+    this.handleProfileClick = this.handleProfileClick.bind(this);
     this.handleGoalUpdate = this.handleGoalUpdate.bind(this);
     this.handleGoalAdd = this.handleGoalAdd.bind(this);
     this.handleGoalDelete = this.handleGoalDelete.bind(this);
     this.handleDoneClick = this.handleDoneClick.bind(this);
     this.toggleSnackBar = this.toggleSnackBar.bind(this);
+    this.toggleProfileModal = this.toggleProfileModal.bind(this);
     this.sendData = this.sendData.bind(this);
   }
 
@@ -281,13 +287,21 @@ class Main extends React.Component {
     this.sendData(ep.workouts.done, doneMessage, getWorkoutDone({ ...workout, last }), "PUT");
   }
 
+  toggleProfileModal() {
+    this.setState(({ profileModalOpen }) => ({ profileModalOpen: !profileModalOpen }));
+  }
+  handleProfileClick() {
+    this.toggleProfileModal();
+  }
+
   render() {
     const { classes, logoutHandler } = this.props;
-    const { workoutModalOpen, openModal, showDoneMessage, doneMessage, doneMessageDuration, workoutAddModalOpen } = this.state;
-    const { goals, workouts } = this.state.data;
+    const { workoutModalOpen, profileModalOpen, openModal, showDoneMessage, doneMessage, doneMessageDuration, workoutAddModalOpen, wUnit, hUnit } = this.state;
+    const { goals, workouts, id, fname, lname, weight, height } = this.state.data;
+    console.log(this.state.data);
     return (
       <div className={classes.mainContainer}>
-        <Navbar handleLogout={logoutHandler} />
+        <Navbar handleLogout={logoutHandler} handleProfileClick={this.handleProfileClick} />
         <Sidebar
           workouts={workouts}
           goals={goals}
@@ -334,6 +348,21 @@ class Main extends React.Component {
           />
         )}
         <WorkoutAddModal open={workoutAddModalOpen} handleWorkoutAddModalToggle={this.handleWorkoutAddModalToggle} handleWorkoutAdd={this.handleWorkoutAdd} />
+        {fname.length > 0 && (
+          <ProfileModal
+            key={id}
+            open={profileModalOpen}
+            sendData={this.sendData}
+            id={id}
+            fname={fname}
+            lname={lname}
+            weight={weight}
+            height={height}
+            handleClose={this.toggleProfileModal}
+            wUnit={wUnit}
+            hUnit={hUnit}
+          />
+        )}
       </div>
     );
   }

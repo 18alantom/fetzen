@@ -14,7 +14,6 @@ const styles = theme => {
       background: theme.palette.secondary.dark,
       display: "grid",
       gridTemplateColumns: "1fr 1fr",
-      // justifyContent: "space-between",
       height: "4rem",
       gridArea: "navbar"
     },

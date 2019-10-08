@@ -2,7 +2,7 @@ export const endpoints = {
   users: {
     login: "/users/login", // POST
     register: "/users/register", // POST
-    weightUpdate: "/users/weight", // POST
+    weightObtainAll: "/users/weight", // POST
     weightInsert: "/users/weight", // PUT
     delete: "/users/delete" // DELETE
   },
