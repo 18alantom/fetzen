@@ -8,9 +8,9 @@ import theme from "./themes";
 
 let URL;
 if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
-  URL = "http://localhost:3000";
+  URL = "http://localhost:3001";
 } else {
-  URL = "";
+  URL = "https://fetzen-server.herokuapp.com";
 }
 
 ReactDOM.render(

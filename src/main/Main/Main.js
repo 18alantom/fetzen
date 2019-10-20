@@ -198,7 +198,7 @@ class Main extends React.Component {
         this.dataUpdated();
       }
     );
-    this.sendData(ep.goals.add, doneMessage, getGoalAddJson({ ...goal, uid: this.state.id }), "POST");
+    this.sendData(ep.goals.add, doneMessage, getGoalAddJson({ ...goal, uid: this.state.data.id }), "POST");
   }
 
   handleGoalDelete(id) {
