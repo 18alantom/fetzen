@@ -34,3 +34,6 @@ Tracking of weight, plotting using [chart.js](https://www.chartjs.org/)
 ### Why was it made?
 - For a college web development course project.
 
+### Update
+- I wouldn't consider this good design, the contrast is egregiously off.
+- This is an example of dark mode done wrong, it can be much better.
